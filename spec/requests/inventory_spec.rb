@@ -1,12 +1,18 @@
 require 'spec_helper'
 
 RSpec.describe 'Inventory update', type: :request do
-  let(:token) { '' }
-  before { post '/api/v1/inventory', params: { token: token } }
+  subject(:json) { JSON.parse(update.body, symbolize_names: true) }
+  subject(:update) do
+    post '/api/v1/inventory', params: { token: token, products: products }
+    response
+  end
+
+  let(:token){}
+  let(:products){}
 
   context 'when user is unauthorized' do
-    it { expect(response).to have_http_status(:unauthorized) }
-    it { expect(response.body).to match('You must specify an API key') }
+    it { is_expected.to have_http_status(:unauthorized) }
+    it { expect(update.body).to match('You must specify an API key') }
   end
 
   context 'when user is authorized' do
@@ -14,7 +20,19 @@ RSpec.describe 'Inventory update', type: :request do
     let(:token) { admin.spree_api_key }
 
     context 'when no content' do
-      it { expect(response).to have_http_status(:no_content) }
+      it { is_expected.to have_http_status(:unprocessable_entity) }
+    end
+
+    context 'when has products' do
+      let(:products) do
+        [{
+          name: 'The Other Product',
+          price: 19.99
+        }]
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(json).to include(success: 1) }
     end
   end
 end

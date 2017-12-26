@@ -4,9 +4,7 @@ RSpec.describe 'Orders fetch', type: :request do
   let(:token) { '' }
   let(:from) { Time.current - 1.day }
 
-  subject(:json) do
-    JSON.parse(fetch.body, symbolize_names: true)
-  end
+  subject(:json) { JSON.parse(fetch.body, symbolize_names: true) }
 
   subject(:fetch) do
     get '/api/v1/orders/fetch', params: { token: token,
@@ -37,7 +35,6 @@ RSpec.describe 'Orders fetch', type: :request do
       fcontext 'when order is ready' do
         let!(:order) { create :order_ready_to_ship }
         it { expect(json).to include(orders: [hash_including(id: order.id)]) }
-        it { pp json }
       end
 
       context 'when order is outdated' do
