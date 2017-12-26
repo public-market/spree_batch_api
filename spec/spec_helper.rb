@@ -29,12 +29,14 @@ require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/controller_requests'
 require 'spree/testing_support/factories'
 require 'spree/testing_support/url_helpers'
+require 'spree/api/testing_support/helpers'
 
 # Requires factories defined in lib/spree_public_market/factories.rb
 require 'spree_public_market/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include Spree::Api::TestingSupport::Helpers
 
   Capybara.javascript_driver = :poltergeist
 
@@ -97,3 +99,4 @@ RSpec.configure do |config|
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.order = 'random'
 end
+

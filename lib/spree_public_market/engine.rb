@@ -1,3 +1,5 @@
+require 'versioncake'
+
 module SpreePublicMarket
   class Engine < Rails::Engine
     require 'spree/core'
@@ -7,6 +9,24 @@ module SpreePublicMarket
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec
+    end
+
+    Rabl.configure do |config|
+      config.include_json_root = false
+      config.include_child_root = false
+
+      config.json_engine = ActiveSupport::JSON
+    end
+
+    initializer 'spree.api.versioncake' do |_app|
+      VersionCake.setup do |config|
+        config.resources do |r|
+          r.resource %r{.*}, [], [], [1]
+        end
+
+        config.missing_version = 1
+        config.extraction_strategy = :http_header
+      end
     end
 
     def self.activate
