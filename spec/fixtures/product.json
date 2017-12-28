@@ -1,0 +1,76 @@
+{
+  "name": "Spree T-Shirt",
+  "sku": "SPREE-T-SHIRT",
+  "description": "Awesome Spree T-Shirt",
+  "price": 35,
+  "cost_price": 22.33,
+  "meta_description": null,
+  "meta_keywords": null,
+  "taxons": [
+    [
+      "Categories",
+      "Clothes",
+      "T-Shirts"
+    ],
+    [
+      "Brands",
+      "Spree"
+    ],
+    [
+      "Brands",
+      "Open Source"
+    ]
+  ],
+  "option_types": [{
+    "name": "condition",
+    "presentation": "Condition",
+    "values": [
+      { "name": "new", "presentation": "New" }
+    ]
+  }],
+  "options": {
+    "condition": "NEW"
+  },
+  "property_types": [{
+    "name": "material",
+    "presentation": "Material"
+  },
+  { "name": "fit",
+    "presentation": "Fit"
+  }],
+  "properties": {
+    "material": "cotton",
+    "fit": "smart fit"
+  },
+  "images": [
+    {
+      "url": "http://dummyimage.com/600x400/000/fff.jpg",
+      "position": 1,
+      "title": "Spree T-Shirt - Grey Small",
+      "type": "thumbnail",
+      "height": 220,
+      "width": 100
+    }
+  ],
+  "variants": [
+    {
+      "sku": "SPREE-T-SHIRT-S",
+      "price": 39.99,
+      "cost_price": 22.33,
+      "quantity": 1,
+      "options": {
+        "condition": "NEW"
+      },
+      "images": [
+        {
+          "url": "http://dummyimage.com/600x400/000/fff.jpg",
+          "position": 1,
+          "title": "Spree T-Shirt - Grey Small",
+          "type": "thumbnail",
+          "height": 220,
+          "width": 100
+        }
+      ]
+    }
+  ]
+}

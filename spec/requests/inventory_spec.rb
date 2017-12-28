@@ -24,12 +24,7 @@ RSpec.describe 'Inventory update', type: :request do
     end
 
     context 'when has products' do
-      let(:products) do
-        [{
-          name: 'The Other Product',
-          price: 19.99
-        }]
-      end
+      let(:products) { [JSON.load(File.new('spec/fixtures/product.json'))] }
 
       it { is_expected.to have_http_status(:ok) }
       it { expect(json).to include(success: 1) }
