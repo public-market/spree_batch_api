@@ -1,22 +1,22 @@
 require 'versioncake'
 
-module SpreePublicMarket
+module SpreeBatchApi
   class Engine < Rails::Engine
     require 'spree/core'
     isolate_namespace Spree
-    engine_name 'spree_public_market'
+    engine_name 'spree_batch_api'
 
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec
     end
 
-    Rabl.configure do |config|
-      config.include_json_root = false
-      config.include_child_root = false
+    # Rabl.configure do |config|
+    #   config.include_json_root = false
+    #   config.include_child_root = false
 
-      config.json_engine = ActiveSupport::JSON
-    end
+    #   config.json_engine = ActiveSupport::JSON
+    # end
 
     initializer 'spree.api.versioncake' do |_app|
       VersionCake.setup do |config|

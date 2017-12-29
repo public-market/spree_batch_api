@@ -31,8 +31,8 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/url_helpers'
 require 'spree/api/testing_support/helpers'
 
-# Requires factories defined in lib/spree_public_market/factories.rb
-require 'spree_public_market/factories'
+# Requires factories defined in lib/spree_batch_api/factories.rb
+require 'spree_batch_api/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods

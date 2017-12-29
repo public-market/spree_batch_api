@@ -1,7 +1,7 @@
-module SpreePublicMarket
+module SpreeBatchApi
   module_function
 
-  # Returns the version of the currently loaded SpreePublicMarket as a
+  # Returns the version of the currently loaded SpreeBatchApi as a
   # <tt>Gem::Version</tt>.
   def version
     Gem::Version.new VERSION::STRING

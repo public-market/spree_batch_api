@@ -2,19 +2,19 @@
 lib = File.expand_path('../lib/', __FILE__)
 $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
-require 'spree_public_market/version'
+require 'spree_batch_api/version'
 
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
-  s.name        = 'spree_public_market'
-  s.version     = SpreePublicMarket.version
+  s.name        = 'spree_batch_api'
+  s.version     = SpreeBatchApi.version
   s.summary     = 'Add extension summary here'
   s.description = 'Add (optional) extension description here'
   s.required_ruby_version = '>= 2.2.7'
 
   s.author    = 'You'
   s.email     = 'you@example.com'
-  s.homepage  = 'https://github.com/your-github-handle/spree_public_market'
+  s.homepage  = 'https://github.com/Abundance-Coin/spree_batch_api'
   s.license = 'BSD-3-Clause'
 
   # s.files       = `git ls-files`.split("\n").reject { |f| f.match(/^spec/) && !f.match(/^spec\/fixtures/) }

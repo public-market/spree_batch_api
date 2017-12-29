@@ -1,13 +1,13 @@
-Spree Public Market integration
+Spree Batch API
 =================
 
-Official Public Market integration for Spree open-source marketplace. Public Market extension enables pub/sub syncronization with Public Market.
+Batch API extension allows to update product/inventory/orders in batches.
 
 ## Installation
 
 1. Add this extension to your Gemfile with this line:
   ```ruby
-  gem 'spree_public_market', github: 'Abundance-Coin/spree_public_market'
+  gem 'spree_batch_api', github: 'Abundance-Coin/spree_batch_api'
   ```
 
 2. Install the gem using Bundler:
@@ -17,7 +17,7 @@ Official Public Market integration for Spree open-source marketplace. Public Mar
 
 3. Copy & run migrations
   ```ruby
-  bundle exec rails g spree_public_market:install
+  bundle exec rails g spree_batch_api:install
   ```
 
 4. Restart your server
@@ -37,7 +37,7 @@ When testing your applications integration with this extension you may use it's 
 Simply add this require statement to your spec_helper:
 
 ```ruby
-require 'spree_public_market/factories'
+require 'spree_batch_api/factories'
 ```
 
 
