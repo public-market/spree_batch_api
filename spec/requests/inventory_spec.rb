@@ -28,6 +28,14 @@ RSpec.describe 'Inventory update', type: :request do
 
       it { is_expected.to have_http_status(:ok) }
       it { expect(json).to include(success: 1) }
+      it { expect { update }.to change(Spree::Product, :count).by(1) }
+      it { expect { update }.to change(Spree::Variant, :count).by(2) }
+      it { expect { update }.to change(Spree::Image, :count).by(2) }
+
+      describe 'after update' do
+        before { update }
+        it { expect(Spree::Variant.last.total_on_hand).to eq(1) }
+      end
     end
   end
 end

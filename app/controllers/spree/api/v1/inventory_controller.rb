@@ -58,7 +58,7 @@ module Spree
         end
 
         def variant_attributes
-          permitted_variant_attributes.push(images: [permitted_image_attributes], options: {})
+          permitted_variant_attributes.push(:quantity, images: [permitted_image_attributes], options: {})
         end
 
         def permitted_image_attributes
