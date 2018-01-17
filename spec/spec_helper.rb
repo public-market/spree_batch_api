@@ -38,6 +38,9 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include Spree::Api::TestingSupport::Helpers
 
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
+
   Capybara.javascript_driver = :poltergeist
 
   Capybara.register_driver(:poltergeist) do |app|

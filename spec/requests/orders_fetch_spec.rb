@@ -18,7 +18,7 @@ RSpec.describe 'Orders fetch', type: :request do
   end
 
   context 'when user is authorized' do
-    let(:admin) { create :admin_user, spree_api_key: 'secure' }
+    let(:admin) { create(:admin_user, spree_api_key: 'secure') }
     let(:token) { admin.spree_api_key }
 
     context 'when no content' do
@@ -28,17 +28,17 @@ RSpec.describe 'Orders fetch', type: :request do
 
     context 'when have orders' do
       context 'when order is not ready' do
-        let!(:order) { create :order }
+        let!(:order) { create(:order) }
         it { expect(json).to include(count: 0) }
       end
 
       context 'when order is not paid' do
-        let!(:order) { create :completed_order_with_totals }
+        let!(:order) { create(:completed_order_with_totals) }
         it { expect(json).to include(count: 0) }
       end
 
       context 'when order is paid' do
-        let!(:order) { create :order_ready_to_ship }
+        let!(:order) { create(:order_ready_to_ship) }
         it { expect(json).to include(orders: [hash_including(id: order.id)]) }
       end
 

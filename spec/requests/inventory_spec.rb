@@ -7,8 +7,8 @@ RSpec.describe 'Inventory update', type: :request do
     response
   end
 
-  let(:token){}
-  let(:products){}
+  let(:token) {}
+  let(:products) {}
 
   context 'when user is unauthorized' do
     it { is_expected.to have_http_status(:unauthorized) }

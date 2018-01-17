@@ -46,7 +46,7 @@ module Spree
         end
 
         def permitted_order_attributes
-          %i[number status]
+          %i[number action]
         end
       end
     end

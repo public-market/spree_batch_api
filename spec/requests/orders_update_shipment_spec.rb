@@ -17,17 +17,22 @@ RSpec.describe 'Orders update shipments', type: :request do
   end
 
   context 'when user is authorized' do
-    let(:admin) { create :admin_user, spree_api_key: 'secure' }
+    let(:admin) { create(:admin_user, spree_api_key: 'secure') }
     let(:token) { admin.spree_api_key }
-    let(:order) { create :completed_order_with_store_credit_payment }
-    let(:orders) { [{ number: order.number, action: :ready }] }
+    let(:order) { create(:order_ready_to_ship) }
+    let(:orders) { [{ number: order.number, action: :ship }] }
 
     before { order.process_payments! }
 
-    context 'when order is ready' do
+    context 'when order is shipped' do
       it { is_expected.to have_http_status(:ok) }
-      it { expect(order.reload.shipment_state).to eq('ready') }
       it { expect(json).to include(success: 1) }
+
+      it 'changes shipment state' do
+        expect {
+          update
+        }.to change { order.reload.shipment_state }.from('ready').to('shipped')
+      end
     end
   end
 end

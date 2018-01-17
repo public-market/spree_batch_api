@@ -32,6 +32,10 @@ module Spree
         break if shipment.ready?
         shipment.ready!
       end
+
+      # call manually because it's not called in spree on transition to ready
+      Spree::OrderUpdater.new(@order).update_shipment_state
+      @order.save!
     end
 
     def ship_order

@@ -61,7 +61,7 @@ RSpec.describe Spree::UpdateInventoryItemAction, type: :action do
         expect(product.variants.first.images.count).to eq(1)
       end
 
-      fcontext 'when update' do
+      context 'when update' do
         subject(:updated_product) do
           product
           described_class.new(options).call
