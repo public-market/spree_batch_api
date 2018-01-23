@@ -1,16 +1,15 @@
 require 'spec_helper'
 
 RSpec.describe 'Orders fetch', type: :request do
-  let(:token) { '' }
-  let(:from) { Time.current - 1.day }
-
-  subject(:json) { JSON.parse(fetch.body, symbolize_names: true) }
-
   subject(:fetch) do
     get '/api/v1/orders/fetch', params: { token: token,
                                           from_timestamp: from.to_i }
     response
   end
+
+  let(:json) { JSON.parse(fetch.body, symbolize_names: true) }
+  let(:token) { '' }
+  let(:from) { Time.current - 1.day }
 
   context 'when user is unauthorized' do
     it { is_expected.to have_http_status(:unauthorized) }
@@ -28,22 +27,26 @@ RSpec.describe 'Orders fetch', type: :request do
 
     context 'when have orders' do
       context 'when order is not ready' do
-        let!(:order) { create(:order) }
+        before { create(:order) }
+
         it { expect(json).to include(count: 0) }
       end
 
       context 'when order is not paid' do
-        let!(:order) { create(:completed_order_with_totals) }
+        before { create(:completed_order_with_totals) }
+
         it { expect(json).to include(count: 0) }
       end
 
       context 'when order is paid' do
         let!(:order) { create(:order_ready_to_ship) }
+
         it { expect(json).to include(orders: [hash_including(id: order.id)]) }
       end
 
       context 'when order is outdated' do
         let(:from) { Time.current + 1.day }
+
         it { expect(json[:count]).to eq(0) }
       end
     end

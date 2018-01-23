@@ -1,0 +1,18 @@
+require: rubocop-rspec
+
+inherit_from: ../.rubocop.yml
+
+Metrics/BlockLength:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
+
+RSpec/MultipleExpectations:
+  Max: 6
+
+RSpec/ExampleLength:
+  Max: 6
+
+Style/BlockDelimiters:
+  Enabled: false

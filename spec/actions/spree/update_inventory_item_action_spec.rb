@@ -7,11 +7,14 @@ RSpec.describe Spree::UpdateInventoryItemAction, type: :action do
     let(:images) { [] }
 
     let(:options) do
-      { product_attrs: { name: 'Spree T-Shirt',
-                         description: 'Awesome Spree T-Shirt',
-                         price: '35',
-                         sku: 'SPREE-T-SHIRT',
-                         cost_price: '22.33' },
+      {
+        product_attrs: {
+          name: 'Spree T-Shirt',
+          description: 'Awesome Spree T-Shirt',
+          price: '35',
+          sku: 'SPREE-T-SHIRT',
+          cost_price: '22.33'
+        },
         option_types_attrs: [{
           name: 'condition', presentation: 'Condition', values: [
             { name: 'new', presentation: 'NEW' }
@@ -34,10 +37,11 @@ RSpec.describe Spree::UpdateInventoryItemAction, type: :action do
           { sku: 'SPREE-T-SHIRT-S', price: '35', quantity: 5,
             options: { condition: 'NEW' }, images: images },
           { sku: 'SPREE-T-SHIRT-M', price: '37', quantity: 5,
-            options: { condition: 'NEW' } },
+            options: { condition: 'NEW' }},
           { sku: 'SPREE-T-SHIRT-XL', price: '40', quantity: 0,
-            options: { condition: 'NEW' } }
-        ] }
+            options: { condition: 'NEW' }}
+        ]
+      }
     end
 
     it { expect(product.valid?).to eq(true) }
@@ -48,9 +52,9 @@ RSpec.describe Spree::UpdateInventoryItemAction, type: :action do
     it { expect(product.properties.count).to eq(2) }
     it { expect(product.images.count).to eq(0) }
     it { expect(product.variants.count).to eq(3) }
-    it { expect(product.variants.first.in_stock?).to be_truthy }
+    it { expect(product.variants.first).to be_in_stock }
     it { expect(product.variants.first.option_values).not_to be_empty }
-    it { expect(product.variants.last.in_stock?).to be_falsy }
+    it { expect(product.variants.last).not_to be_in_stock }
     it { expect(product.variants.first.images.count).to eq(0) }
 
     context 'with images' do

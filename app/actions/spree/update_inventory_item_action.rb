@@ -91,7 +91,7 @@ module Spree
     end
 
     def process_quantity(variant, quantity)
-      return unless quantity.present?
+      return if quantity.blank?
 
       stock_item = variant.stock_items.first
       stock_item.set_count_on_hand(quantity)

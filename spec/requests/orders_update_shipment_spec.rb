@@ -1,13 +1,12 @@
 require 'spec_helper'
 
 RSpec.describe 'Orders update shipments', type: :request do
-  subject(:json) { JSON.parse(update.body, symbolize_names: true) }
-
   subject(:update) do
     post '/api/v1/orders/update_shipments', params: { token: token, orders: orders }
     response
   end
 
+  let(:json) { JSON.parse(update.body, symbolize_names: true) }
   let(:token) { '' }
   let(:orders) { [] }
 

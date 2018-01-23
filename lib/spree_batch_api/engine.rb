@@ -21,7 +21,7 @@ module SpreeBatchApi
     initializer 'spree.api.versioncake' do |_app|
       VersionCake.setup do |config|
         config.resources do |r|
-          r.resource %r{.*}, [], [], [1]
+          r.resource(/.*/, [], [], [1])
         end
 
         config.missing_version = 1
@@ -35,6 +35,6 @@ module SpreeBatchApi
       end
     end
 
-    config.to_prepare &method(:activate).to_proc
+    config.to_prepare(&method(:activate).to_proc)
   end
 end

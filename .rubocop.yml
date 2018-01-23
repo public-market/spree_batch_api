@@ -1,0 +1,39 @@
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.4
+  Include:
+    - '**/Gemfile'
+    - '**/Rakefile'
+  Exclude:
+    - 'spec/dummy/**/*'
+    - 'lib/generators/**/*'
+
+Rails:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: compact
+
+Style/HashSyntax:
+  Enabled: true
+  EnforcedStyle: ruby19_no_mixed_keys
+
+Metrics/LineLength:
+  Max: 150
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spree_batch_api.gemspec'
+
+Security/JSONLoad:
+  Exclude:
+    - 'spec/**/*'
+
+# DISABLED
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
