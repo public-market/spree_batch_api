@@ -1,4 +1,4 @@
-Spree Batch API
+Spree Batch API [![Build Status](https://travis-ci.org/public-market/spree_batch_api.svg?branch=master)](https://travis-ci.org/public-market/spree_batch_api)
 =================
 
 Batch API extension allows to update product/inventory/orders in batches.
