@@ -35,6 +35,9 @@ module SpreeBatchApi
       end
     end
 
+    require 'paperclip'
+    Paperclip::UriAdapter.register # used by UpdateInventoryItem image uploader, possibly vulnerable
+
     config.to_prepare(&method(:activate).to_proc)
   end
 end
