@@ -1,0 +1,26 @@
+module Spree
+  module Inventory
+    class BaseImportAction < Spree::BaseAction
+      param :status_worker
+      option :inventory_provider, default: proc { Spree::Inventory::Providers::DefaultVariantProvider }
+
+      def call
+        map_items do |item_json, index|
+          status_worker&.at(index + 1)
+          begin
+            inventory_provider.call(item_json)
+          rescue ImportError => e
+            raise ImportError.new(t('invalid_item', index: index, messages: e.message), e.object) unless status_worker
+            status_worker.catch_error(e)
+          end
+        end
+      end
+
+      protected
+
+      def map_items
+        raise NotImplementedError, 'map_items'
+      end
+    end
+  end
+end

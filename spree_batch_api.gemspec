@@ -14,14 +14,17 @@ Gem::Specification.new do |s|
 
   s.author    = 'You'
   s.email     = 'you@example.com'
-  s.homepage  = 'https://github.com/Abundance-Coin/spree_batch_api'
+  s.homepage  = 'https://github.com/public-market/spree_batch_api'
   s.license = 'BSD-3-Clause'
 
   # s.files       = `git ls-files`.split("\n").reject { |f| f.match(/^spec/) && !f.match(/^spec\/fixtures/) }
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'paperclip', '~> 5.2.0'
+  s.add_dependency 'dry-initializer'
+  s.add_dependency 'dry-validation'
+  s.add_dependency 'sidekiq-scheduler'
+  s.add_dependency 'sidekiq-status', '~> 1.0.0'
   s.add_dependency 'spree_core', '>= 3.1.0', '< 4.0'
   s.add_dependency 'spree_extension'
 
@@ -36,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pg'
   s.add_development_dependency 'poltergeist'
   s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'rspec-sidekiq'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov'

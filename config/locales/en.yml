@@ -2,4 +2,20 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  actions:
+    spree:
+      inventory:
+        providers:
+          default_variant_provider:
+            no_isbn: 'Unknown ISBN found'
+        csv_import_action:
+          invalid_csv:
+            default: CSV file is invalid
+          invalid_item: 'Item %{index} invalid: %{messages}'
+        json_import_action:
+          empty_payload: Empty JSON payload
+          invalid_json:
+            default: "Payload JSON is invalid"
+            hash: "Root of JSON should be an object"
+            schema: 'JSON schema is invalid: %{messages}'
+          invalid_item: 'Item %{index} invalid: %{messages}'
