@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'dry-initializer'
   s.add_dependency 'dry-validation'
+  s.add_dependency 'paperclip', '~> 5.2.0'
   s.add_dependency 'sidekiq-scheduler'
   s.add_dependency 'sidekiq-status', '~> 1.0.0'
   s.add_dependency 'spree_core', '>= 3.1.0', '< 4.0'
