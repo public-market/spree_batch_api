@@ -19,11 +19,11 @@ module Spree
             description: FFaker::Book.description,
             images: images,
             subject: FFaker::Book.genre,
-            weight: 10.5,
-            height: 5.2,
-            width: 3.0,
-            depth: 1.0,
-            price: 4.95
+            weight: Random.rand(15.0).floor(1),
+            height: Random.rand(10.0).floor(1),
+            width: Random.rand(5.0).floor(1),
+            depth: Random.rand(1.0).floor(1),
+            price: Random.rand(100.0).floor(2)
           }
         end
 
