@@ -82,7 +82,8 @@ module Spree
             meta_description: metadata[:description],
             meta_title: metadata[:title],
             meta_keywords: metadata[:subject],
-            shipping_category: ShippingCategory.first_or_create(name: 'Default')
+            shipping_category: ShippingCategory.first_or_create(name: 'Default'),
+            available_on: Time.current
           )
         end
 

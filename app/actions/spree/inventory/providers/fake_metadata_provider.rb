@@ -1,3 +1,5 @@
+require 'ffaker'
+
 module Spree
   module Inventory
     module Providers

@@ -7,8 +7,8 @@ module Spree
       UPLOAD_BUCKET = 'inventory_uploads'.freeze
 
       def call
-        filepath = save_content
         upload = create_upload
+        filepath = save_content(upload.id)
         job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, filepath)
 
         upload.update(job_id: job_id)
@@ -17,8 +17,8 @@ module Spree
 
       private
 
-      def save_content
-        file = Tempfile.open(UPLOAD_BUCKET)
+      def save_content(upload_id)
+        file = File.open("/tmp/#{upload_id}", 'w')
         file.write(content)
         file.close
         file.path
