@@ -79,6 +79,7 @@ module Spree
           Product.new(
             name: metadata[:title],
             price: metadata[:price],
+            description: metadata[:description],
             meta_description: metadata[:description],
             meta_title: metadata[:title],
             meta_keywords: metadata[:subject],

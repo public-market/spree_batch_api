@@ -41,6 +41,7 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       it { expect(product).to be_persisted }
       it { expect(product.width).not_to be_nil }
       it { expect(product.available_on).not_to be_nil }
+      it { expect(product.description).not_to be_nil }
       it { expect(product.properties.count).to eq(1) }
       it { expect(product.option_types.count).to eq(1) }
       it { expect(product.variants.count).to eq(1) }
