@@ -5,4 +5,5 @@ RSpec.describe Spree::Inventory::UploadFileAction, type: :action do
 
   it { expect { upload }.to change(Spree::Upload, :count).by(1) }
   it { expect(upload.job_id).not_to be_nil }
+  it { expect(upload.status).to eq('processing') }
 end

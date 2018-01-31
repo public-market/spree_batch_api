@@ -15,9 +15,9 @@ module Spree
       begin
         upload_action(format, local_file)
         upload.complete!
-      rescue Inventory::UploadError => e
+      rescue Spree::ImportError => e
         catch_error(e)
-        upload.failed!
+        upload.fail!
       end
     end
 

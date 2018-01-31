@@ -12,7 +12,7 @@ module Spree
         job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, filepath)
 
         upload.update(job_id: job_id)
-        upload
+        upload.reload
       end
 
       private

@@ -1,3 +1,2 @@
-object false
-node(:success) { @success }
-node(:failures) { @failures }
+object @upload
+attributes :job_id, :status
