@@ -104,6 +104,7 @@ module Spree
                            .where(sku: item[:sku], product: product)
                            .first_or_initialize
           variant.price = item[:price]
+          variant.notes = item[:notes] if variant.respond_to?(:notes)
           variant.options = [{ name: CONDITION_OPTION_TYPE, value: item[:condition] }]
           update_variant_hook(variant)
 

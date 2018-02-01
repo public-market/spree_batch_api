@@ -59,6 +59,14 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       context 'with images', images: true do
         it { expect(product.images.count).to eq(1) }
       end
+
+      context 'with variant notes' do
+        Spree::Variant.class_eval do
+          attr_accessor :notes
+        end
+
+        it { expect(variant.notes).to eq(item_json[:notes]) }
+      end
     end
 
     context 'when variant already exists' do
