@@ -5,7 +5,8 @@ module Spree
     module Providers
       PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
       ISBN_PROPERTY = 'isbn'.freeze
-      ISBN_PROPERTY_PRESENTATION = 'ISBN'.freeze
+      AUTHOR_PROPERTY = 'author'.freeze
+      PUBLISHED_AT_PROPERTY = 'published_at'.freeze
       CONDITION_OPTION_TYPE = 'condition'.freeze
 
       # Default variant provider use Indaba inventory format
@@ -72,6 +73,9 @@ module Spree
           product.product_option_types.build(option_type: condition_option_type)
           product.save!
 
+          product.set_property(AUTHOR_PROPERTY, metadata[:author], I18n.t('properties.author'))
+          product.set_property(PUBLISHED_AT_PROPERTY, metadata[:published_at], I18n.t('properties.published_at'))
+
           product
         end
 
@@ -125,7 +129,7 @@ module Spree
         end
 
         def isbn_property
-          Property.create_with(presentation: ISBN_PROPERTY_PRESENTATION)
+          Property.create_with(presentation: I18n.t('properties.isbn'))
                   .find_or_create_by(name: ISBN_PROPERTY)
         end
 

@@ -2,6 +2,10 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  properties:
+    isbn: ISBN
+    author: Author
+    published_at: Published
   actions:
     spree:
       inventory:
