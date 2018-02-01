@@ -3,12 +3,13 @@ module Spree
     class BaseImportAction < Spree::BaseAction
       param :status_worker
       option :inventory_provider, default: proc { Spree::Inventory::Providers::DefaultVariantProvider }
+      option :options, optional: true
 
       def call
         map_items do |item_json, index|
           status_worker&.at(index + 1)
           begin
-            inventory_provider.call(item_json)
+            inventory_provider.call(item_json, options: options)
           rescue ImportError => e
             raise ImportError.new(t('invalid_item', index: index, messages: e.message), e.object) unless status_worker
             status_worker.catch_error(e)

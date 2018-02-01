@@ -31,10 +31,15 @@ module Spree
       case format
       when 'json'
         payload = File.read(local_file)
-        Inventory::JsonImportAction.call(self, payload)
+        Inventory::JsonImportAction.call(self, payload, options: options)
       when 'csv'
-        Inventory::CSVImportAction.call(self, local_file)
+        Inventory::CSVImportAction.call(self, local_file, options: options)
       end
+    end
+
+    # allow to override data passed to import actions
+    def options
+      {}
     end
   end
 end

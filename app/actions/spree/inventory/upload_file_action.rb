@@ -3,6 +3,7 @@ module Spree
     class UploadFileAction < BaseAction
       param :format
       param :file_path
+      option :upload_options, optional: true, default: proc { {} }
 
       UPLOAD_BUCKET = 'inventory_uploads'.freeze
       SUPPORTED_FORMATS = %w[csv json].freeze
@@ -26,7 +27,7 @@ module Spree
       end
 
       def create_upload
-        Upload.create(status: :processing)
+        Upload.create(status: :processing, **upload_options)
       end
     end
   end

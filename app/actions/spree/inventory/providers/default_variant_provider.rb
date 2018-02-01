@@ -22,6 +22,7 @@ module Spree
 
       class DefaultVariantProvider < Spree::BaseAction
         param :item_json
+        option :options, optional: true
 
         def call
           item_hash = validate_item(cast_values(item_json))
