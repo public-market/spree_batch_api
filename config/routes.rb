@@ -6,4 +6,8 @@ Spree::Core::Engine.add_routes do
       post '/orders/update_shipments', to: 'orders#update_shipments'
     end
   end
+
+  namespace :admin do
+    resources :uploads, only: [:index, :show]
+  end
 end

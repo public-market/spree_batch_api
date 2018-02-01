@@ -1,0 +1,36 @@
+<% content_for :page_title do %>Uploads<% end %>
+
+<% if @uploads.any? %>
+  <table class="table" id="listing_uploads" data-hook>
+    <colgroup>
+      <col style="width: 40%">
+      <col style="width: 35%">
+      <col style="width: 10%">
+      <col style="width: 15%">
+    </colgroup>
+    <thead>
+      <tr data-hook="admin_uploads_index_headers">
+        <th><%= sort_link @search, :created_at, 'Date' %></th>
+        <th><%= Spree::Upload.human_attribute_name(:job_id) %></th>
+        <th><%= sort_link @search, :status, 'Status' %></th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @uploads.each do |upload| %>
+        <tr data-hook="admin_uploads_index_rows" class="<%= cycle('odd', 'even') %>" id="<%= dom_id upload %>">
+          <td><%= l(upload.created_at) %></td>
+          <td><%= upload.job_id %></td>
+          <td><%= upload.status.humanize %></td>
+          <td class="actions actions-2 text-right">
+            <%= link_to_with_icon 'eye-open', 'View', admin_upload_path(upload), no_text: true, class: 'btn btn-primary btn-sm' if can?(:show, upload) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-warning no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: Spree::Upload.model_name.human) %>
+  </div>
+<% end %>

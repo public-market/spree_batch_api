@@ -1,0 +1,30 @@
+<% content_for :page_title do %>Upload <%= @upload.job_id %><% end %>
+
+<strong>Date:</strong> <%= l(@upload.created_at) %>
+<br>
+<strong>Status:</strong> <%= @upload.status.humanize %>
+<br>
+<div data-hook="admin_upload_fields"></div>
+
+<% if @upload.upload_errors.any? %>
+  <table class="table" id="listing_errors" data-hook>
+    <colgroup>
+      <col style="width: 40%">
+      <col style="width: 35%">
+      <col style="width: 10%">
+      <col style="width: 15%">
+    </colgroup>
+    <thead>
+      <tr data-hook="admin_errors_index_headers">
+        <th>Error Messages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @upload.upload_errors.each do |error| %>
+        <tr data-hook="admin_uploads_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td><%= error.message %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end%>
