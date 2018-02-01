@@ -2,26 +2,27 @@ module Spree
   module Inventory
     class UploadFileAction < BaseAction
       param :format
-      param :content
+      param :file_path
 
       UPLOAD_BUCKET = 'inventory_uploads'.freeze
+      SUPPORTED_FORMATS = %w[csv json].freeze
 
       def call
+        check_format
+
         upload = create_upload
-        filepath = save_content(upload.id)
-        job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, filepath)
+        job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, file_path)
 
         upload.update(job_id: job_id)
         upload.reload
+      rescue Spree::ImportError => e
+        { errors: e.message.to_s }
       end
 
       private
 
-      def save_content(upload_id)
-        file = File.open("/tmp/#{upload_id}", 'w')
-        file.write(content)
-        file.close
-        file.path
+      def check_format
+        raise Spree::ImportError, t('unsupported_format') unless SUPPORTED_FORMATS.include?(format)
       end
 
       def create_upload

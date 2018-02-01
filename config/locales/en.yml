@@ -23,3 +23,5 @@ en:
             hash: "Root of JSON should be an object"
             schema: 'JSON schema is invalid: %{messages}'
           invalid_item: 'Item %{index} invalid: %{messages}'
+        upload_file_action:
+          unsupported_format: File format is not supported
