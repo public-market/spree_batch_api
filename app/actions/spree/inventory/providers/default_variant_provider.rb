@@ -146,7 +146,7 @@ module Spree
         end
 
         def create_stock_location
-          StockLocation.first_or_create(name: 'default')
+          StockLocation.create_with(backorderable_default: false).first_or_create(name: 'default')
         end
 
         def metadata_provider
