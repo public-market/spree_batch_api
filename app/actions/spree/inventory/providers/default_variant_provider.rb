@@ -95,6 +95,7 @@ module Spree
 
         def build_product_master(product, metadata)
           product.master.assign_attributes(variant_attributes(metadata))
+          return if metadata[:images].blank?
           metadata[:images].each do |img|
             product.master.images.build(alt: img[:title], attachment: URI.parse(img[:url]))
           end
