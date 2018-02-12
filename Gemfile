@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'guard', require: false
+gem 'guard-rspec', require: false
 
 gem 'spree', github: 'spree/spree', branch: 'master'
 # Provides basic authentication functionality for testing parts of your engine

@@ -12,18 +12,26 @@ module Spree
           return if isbn == UNKNOWN_ISBN
 
           {
-            isbn: isbn,
             title: book_title,
             author: author,
-            published_at: 5.years.ago,
             description: description,
             images: images,
-            subject: FFaker::Book.genre,
-            weight: Random.rand(15.0).floor(1),
-            height: Random.rand(10.0).floor(1),
-            width: Random.rand(5.0).floor(1),
-            depth: Random.rand(1.0).floor(1),
-            price: Random.rand(100.0).floor(2)
+            price: Random.rand(100.0).floor(2),
+            properties: {
+              isbn: isbn,
+              author: FFaker::Book.author,
+              format: 'Paperback',
+              publisher: FFaker::Product.brand,
+              published_at: 5.years.ago,
+              edition: '1 Reprint',
+              subject: FFaker::Book.genre
+            },
+            dimensions: {
+              weight: Random.rand(15.0).floor(1),
+              height: Random.rand(10.0).floor(1),
+              width: Random.rand(5.0).floor(1),
+              depth: Random.rand(1.0).floor(1)
+            }
           }
         end
 

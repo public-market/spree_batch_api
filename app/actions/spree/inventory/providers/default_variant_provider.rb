@@ -5,8 +5,6 @@ module Spree
     module Providers
       PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
       ISBN_PROPERTY = 'isbn'.freeze
-      AUTHOR_PROPERTY = 'author'.freeze
-      PUBLISHED_AT_PROPERTY = 'published_at'.freeze
       CONDITION_OPTION_TYPE = 'condition'.freeze
 
       # Default variant provider use Indaba inventory format
@@ -70,12 +68,12 @@ module Spree
           product = build_new_product(metadata)
           build_product_master(product, metadata)
 
-          product.product_properties.build(property: isbn_property, value: metadata[:isbn])
           product.product_option_types.build(option_type: condition_option_type)
           product.save!
 
-          product.set_property(AUTHOR_PROPERTY, metadata[:author], I18n.t('properties.author'))
-          product.set_property(PUBLISHED_AT_PROPERTY, metadata[:published_at], I18n.t('properties.published_at'))
+          metadata[:properties].each do |property_name, property_value|
+            product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
+          end
 
           product
         end
@@ -87,7 +85,7 @@ module Spree
             description: metadata[:description],
             meta_description: metadata[:description],
             meta_title: metadata[:title],
-            meta_keywords: metadata[:subject],
+            meta_keywords: metadata.dig(:properties, :subject),
             shipping_category: ShippingCategory.first_or_create(name: 'Default'),
             available_on: Time.current
           )
@@ -122,12 +120,13 @@ module Spree
         end
 
         def variant_attributes(metadata)
+          dims = metadata[:dimensions]
           {
             is_master: true,
-            weight: metadata[:weight],
-            height: metadata[:height],
-            width: metadata[:width],
-            depth: metadata[:depth]
+            weight: dims[:weight],
+            height: dims[:height],
+            width: dims[:width],
+            depth: dims[:depth]
           }
         end
 
