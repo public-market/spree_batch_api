@@ -11,7 +11,7 @@ module Spree
         private
 
         def save_content
-          file = File.open("/tmp/#{SecureRandom.urlsafe_base64}", 'w')
+          file = File.open("tmp/#{SecureRandom.urlsafe_base64}", 'w')
           file.write(inventory_params['content'])
           file.close
           file.path
