@@ -7,7 +7,7 @@ module Spree
       ISBN_PROPERTY = 'isbn'.freeze
       CONDITION_OPTION_TYPE = 'condition'.freeze
 
-      # Default variant provider use Indaba inventory format
+      # Default variant provider inventory format
       UploadItemSchema = ::Dry::Validation.Schema do
         required(:ean).filled(:str?)
         required(:sku).filled(:str?)
@@ -20,7 +20,7 @@ module Spree
 
       class DefaultVariantProvider < Spree::BaseAction
         param :item_json
-        option :options, optional: true
+        option :options, optional: true, default: proc { Hash.new }
 
         def call
           item_hash = validate_item(cast_values(item_json))
