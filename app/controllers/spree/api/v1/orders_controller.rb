@@ -7,8 +7,9 @@ module Spree
 
           @from = Time.at(fetch_params[:from_timestamp].to_i)
           @orders = Order.complete
+                         .accessible_by(current_ability, :index)
                          .where(payment_state: :paid)
-                         .where('updated_at > ?', @from)
+                         .where('spree_orders.updated_at > ?', @from)
                          .to_a
 
           respond_with(@orders)
