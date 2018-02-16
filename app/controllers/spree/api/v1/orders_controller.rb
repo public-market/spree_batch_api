@@ -26,7 +26,7 @@ module Spree
               UpdateOrderShipmentAction.new(options).call
               @success += 1
             rescue => e
-              @failures[index] = e.message
+              @failures[index] = e.message.gsub('Spree::', '')
             end
           end
         end
