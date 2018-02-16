@@ -41,7 +41,7 @@ RSpec.describe 'Orders fetch', type: :request do
       context 'when order is paid' do
         let!(:order) { create(:order_ready_to_ship) }
 
-        it { expect(json).to include(orders: [hash_including(id: order.id)]) }
+        it { expect(json).to include(orders: [hash_including(order_identifier: order.number)]) }
       end
 
       context 'when order is outdated' do

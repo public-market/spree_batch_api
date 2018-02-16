@@ -6,7 +6,8 @@ module Spree
           authorize! :index, Order
 
           @from = Time.at(fetch_params[:from_timestamp].to_i)
-          @orders = Order.complete
+          @orders = Order.includes(line_items: :variant, ship_address: %i[country state])
+                         .complete
                          .accessible_by(current_ability, :index)
                          .where(payment_state: :paid)
                          .where('spree_orders.updated_at > ?', @from)
