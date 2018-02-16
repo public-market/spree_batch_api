@@ -11,7 +11,8 @@ module Spree
         private
 
         def save_content
-          file = File.open("tmp/#{SecureRandom.urlsafe_base64}", 'w')
+          FileUtils.mkdir_p('tmp/uploads')
+          file = File.open("tmp/uploads/#{SecureRandom.urlsafe_base64}", 'w')
           file.write(request.body.read)
           file.close
           file.path
