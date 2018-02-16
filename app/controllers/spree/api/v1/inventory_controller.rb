@@ -5,20 +5,16 @@ module Spree
         def update
           authorize! :create, Product
           file_path = save_content
-          @upload = Inventory::UploadFileAction.call(inventory_params[:content_format], file_path)
+          @upload = Inventory::UploadFileAction.call(params[:content_format], file_path)
         end
 
         private
 
         def save_content
           file = File.open("tmp/#{SecureRandom.urlsafe_base64}", 'w')
-          file.write(inventory_params['content'])
+          file.write(request.body.read)
           file.close
           file.path
-        end
-
-        def inventory_params
-          params.permit(:content_format, :content)
         end
       end
     end

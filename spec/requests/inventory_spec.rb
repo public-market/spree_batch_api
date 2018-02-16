@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe 'Inventory update', type: :request do
   subject(:update) do
-    post '/api/v1/inventory/csv', params: { token: token, content: content }
+    post '/api/v1/inventory/csv', params: content, headers: { 'X-Spree-Token': token }
     response
   end
 

@@ -8,6 +8,6 @@ Spree::Core::Engine.add_routes do
   end
 
   namespace :admin do
-    resources :uploads, only: [:index, :show]
+    resources :uploads, only: %i[index show]
   end
 end
