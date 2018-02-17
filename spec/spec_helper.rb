@@ -24,46 +24,17 @@ require 'ffaker'
 # in spec/support/ and its subdirectories.
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 
-# Requires factories and other useful helpers defined in spree_core.
-require 'spree/testing_support/authorization_helpers'
-require 'spree/testing_support/capybara_ext'
-require 'spree/testing_support/controller_requests'
-require 'spree/testing_support/factories'
-require 'spree/testing_support/url_helpers'
-require 'spree/api/testing_support/helpers'
-
 # Requires factories defined in lib/spree_batch_api/factories.rb
 require 'spree_batch_api/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
-  config.include Spree::Api::TestingSupport::Helpers
 
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
 
-  Capybara.javascript_driver = :poltergeist
-
-  Capybara.register_driver(:poltergeist) do |app|
-    Capybara::Poltergeist::Driver.new app, js_errors: true, timeout: 60
-  end
-
   # Infer an example group's spec type from the file location.
   config.infer_spec_type_from_file_location!
-
-  # == URL Helpers
-  #
-  # Allows access to Spree's routes in specs:
-  #
-  # visit spree.admin_path
-  # current_path.should eql(spree.products_path)
-  config.include Spree::TestingSupport::UrlHelpers
-
-  # == Requests support
-  #
-  # Adds convenient methods to request Spree's controllers
-  # spree_get :index
-  config.include Spree::TestingSupport::ControllerRequests, type: :controller
 
   # == Mock Framework
   #
