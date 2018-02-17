@@ -3,6 +3,9 @@ dist: trusty
 
 language: ruby
 
+services:
+  - redis-server
+
 env:
   - DB=postgres
   - DB=mysql
