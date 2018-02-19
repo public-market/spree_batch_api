@@ -17,7 +17,9 @@ gemfile:
 before_script:
   - ls -la
   - env
+  - cp $BUNDLE_GEMFILE Gemfile
   - cp $BUNDLE_GEMFILE.lock Gemfile.lock
+  - ls -la
   - bundle exec rake test_app
 
 script:
