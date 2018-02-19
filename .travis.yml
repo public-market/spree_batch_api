@@ -20,7 +20,8 @@ script:
 
 rvm:
   - 2.3.1
-  - 2.2.7
+  - 2.4.1
+  - 2.5.0
 
 before_install:
   - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
