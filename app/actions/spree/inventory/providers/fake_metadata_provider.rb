@@ -16,7 +16,7 @@ module Spree
             author: author,
             description: description,
             images: images,
-            price: Random.rand(100.0).floor(2),
+            price: Random.rand(100.0).round(2),
             properties: {
               isbn: isbn,
               author: FFaker::Book.author,
@@ -27,10 +27,10 @@ module Spree
               subject: FFaker::Book.genre
             },
             dimensions: {
-              weight: Random.rand(15.0).floor(1),
-              height: Random.rand(10.0).floor(1),
-              width: Random.rand(5.0).floor(1),
-              depth: Random.rand(1.0).floor(1)
+              weight: Random.rand(15.0).round(1),
+              height: Random.rand(10.0).round(1),
+              width: Random.rand(5.0).round(1),
+              depth: Random.rand(1.0).round(1)
             }
           }
         end
