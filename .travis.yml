@@ -1,5 +1,6 @@
 sudo: false
 dist: trusty
+cache: bundler
 
 language: ruby
 
@@ -11,8 +12,6 @@ env:
   - DB=mysql
 
 gemfile:
-  - gemfiles/spree_3_3.gemfile
-  - gemfiles/spree_3_4.gemfile
   - gemfiles/spree_master.gemfile
 
 script:
@@ -20,6 +19,9 @@ script:
   - bundle exec rake spec
 
 rvm:
-  - 2.4.3
-  - 2.3.6
-  - 2.2.9
+  - 2.3
+  - 2.4
+  - 2.5
+
+before_install:
+  - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
