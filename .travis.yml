@@ -8,21 +8,20 @@ services:
 
 env:
   - DB=postgres
-  - DB=mysql
 
 gemfile:
   - gemfiles/spree_3_4.gemfile
   - gemfiles/spree_master.gemfile
 
-script:
+before_script:
+  - ls -la
   - env
   - bundle exec rake test_app
+
+script:
   - bundle exec rake spec
 
 rvm:
   - 2.3
   - 2.4
   - 2.5
-
-before_install:
-  - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
