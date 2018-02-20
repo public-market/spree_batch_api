@@ -32,7 +32,8 @@ module Spree
               height: Random.rand(10.0).round(1),
               width: Random.rand(5.0).round(1),
               depth: Random.rand(1.0).round(1)
-            }
+            },
+            taxons: %w[General Book]
           }
         end
 

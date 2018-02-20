@@ -11,4 +11,5 @@ RSpec.describe Spree::Inventory::Providers::FakeMetadataProvider, type: :action 
   it { expect(metadata[:description]).not_to be_empty }
   it { expect(metadata[:dimensions]).not_to be_empty }
   it { expect(metadata[:price]).to be > 0 }
+  it { expect(metadata[:taxons]).not_to be_empty }
 end

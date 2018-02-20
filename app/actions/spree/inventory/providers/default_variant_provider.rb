@@ -4,6 +4,7 @@ module Spree
   module Inventory
     module Providers
       PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
+      TAXONOMY = 'Categories'.freeze
       ISBN_PROPERTY = 'isbn'.freeze
       CONDITION_OPTION_TYPE = 'condition'.freeze
 
@@ -71,11 +72,8 @@ module Spree
           product.product_option_types.build(option_type: condition_option_type)
           product.save!
 
-          metadata[:properties].each do |property_name, property_value|
-            if property_value.present?
-              product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
-            end
-          end
+          set_properties(product, metadata[:properties])
+          categorize(product, metadata[:taxons])
 
           product
         end
@@ -99,6 +97,24 @@ module Spree
           metadata[:images].each do |img|
             product.master.images.build(alt: img[:title], attachment: URI.parse(img[:url]))
           end
+        end
+
+        def set_properties(product, properties)
+          properties.each do |property_name, property_value|
+            if property_value.present?
+              product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
+            end
+          end
+        end
+
+        def categorize(product, taxons)
+          taxonomy = Spree::Taxonomy.create_with(filterable: true).find_or_create_by!(name: TAXONOMY)
+
+          parent_taxon = taxonomy.root
+          taxons.each do |taxon|
+            parent_taxon = parent_taxon.children.find_or_create_by!(name: taxon, taxonomy: taxonomy)
+          end
+          parent_taxon.products << product
         end
 
         def upsert_variant(product, item)

@@ -50,6 +50,7 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       it { expect(product.property(:author)).not_to be_nil }
       it { expect(product.property(:published_at)).not_to be_nil }
       it { expect(product.properties.where(name: 'empty').first).to be_nil }
+      it { expect(product.taxons.count).to eq(2) }
 
       it { expect(variant).not_to be_nil }
       it { expect(variant).not_to eq(product.master) }
