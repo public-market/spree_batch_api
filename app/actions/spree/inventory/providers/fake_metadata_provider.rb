@@ -24,7 +24,8 @@ module Spree
               publisher: FFaker::Product.brand,
               published_at: 5.years.ago,
               edition: '1 Reprint',
-              subject: FFaker::Book.genre
+              subject: FFaker::Book.genre,
+              empty: nil
             },
             dimensions: {
               weight: Random.rand(15.0).round(1),

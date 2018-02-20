@@ -20,7 +20,7 @@ module Spree
 
       class DefaultVariantProvider < Spree::BaseAction
         param :item_json
-        option :options, optional: true, default: proc { Hash.new }
+        option :options, optional: true, default: proc { {} }
 
         def call
           item_hash = validate_item(cast_values(item_json))
@@ -72,7 +72,9 @@ module Spree
           product.save!
 
           metadata[:properties].each do |property_name, property_value|
-            product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
+            if property_value.present?
+              product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
+            end
           end
 
           product
