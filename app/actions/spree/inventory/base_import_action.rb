@@ -11,8 +11,9 @@ module Spree
           begin
             inventory_provider.call(item_json, options: options)
           rescue ImportError => e
-            raise ImportError.new(t('invalid_item', index: index, messages: e.message), e.object) unless status_worker
-            status_worker.catch_error(e)
+            error = ImportError.new(t('invalid_item', index: index, messages: e.message), e.object)
+            raise error unless status_worker
+            status_worker.catch_error(error)
           end
         end
       end
