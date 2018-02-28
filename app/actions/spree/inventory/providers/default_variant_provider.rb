@@ -123,7 +123,7 @@ module Spree
                            .first_or_initialize
           variant.price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
-          update_variant_hook(variant) # run this before options association set
+          update_variant_hook(variant, item) # run this before options association set
           variant.options = [{ name: CONDITION_OPTION_TYPE, value: item[:condition] }]
 
           variant.save!
@@ -171,7 +171,7 @@ module Spree
           Spree::Config.product_metadata_provider.constantize
         end
 
-        def update_variant_hook(variant)
+        def update_variant_hook(variant, item)
           # Hook for extending variants
         end
       end
