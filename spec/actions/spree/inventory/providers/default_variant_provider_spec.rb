@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :action do
-  subject(:variant) { described_class.call(item_json) }
+  subject(:variant) { described_class.call(item_json, options: options) }
+
+  let(:options) { {} }
 
   describe 'metadata provider' do
     it { expect(Spree::Config.product_metadata_provider).to eq('Spree::Inventory::Providers::FakeMetadataProvider') }
@@ -51,6 +53,7 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       it { expect(product.property(:published_at)).not_to be_nil }
       it { expect(product.properties.where(name: 'empty').first).to be_nil }
       it { expect(product.taxons.count).to eq(1) }
+      it { expect(product.taxons.first.taxonomy.name).to eq('Categories') }
 
       it { expect(variant).not_to be_nil }
       it { expect(variant).not_to eq(product.master) }
@@ -69,6 +72,12 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
         end
 
         it { expect(variant.notes).to eq(item_json[:notes]) }
+      end
+
+      context 'with taxonomy option' do
+        let(:options) { { taxonomy: 'Books' } }
+
+        it { expect(product.taxons.first.taxonomy.name).to eq('Books') }
       end
     end
 

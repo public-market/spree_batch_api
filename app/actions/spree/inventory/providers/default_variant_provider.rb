@@ -108,7 +108,7 @@ module Spree
         end
 
         def categorize(product, taxons)
-          taxonomy = Spree::Taxonomy.create_with(filterable: true).find_or_create_by!(name: TAXONOMY)
+          taxonomy = Spree::Taxonomy.create_with(filterable: true).find_or_create_by!(name: taxonomy_name)
 
           parent_taxon = taxonomy.root
           taxons.each do |taxon|
@@ -169,6 +169,10 @@ module Spree
 
         def metadata_provider
           Spree::Config.product_metadata_provider.constantize
+        end
+
+        def taxonomy_name
+          options&.dig(:taxonomy) || TAXONOMY
         end
 
         def update_variant_hook(variant, item)
