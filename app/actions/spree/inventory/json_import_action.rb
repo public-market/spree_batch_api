@@ -6,7 +6,6 @@ module Spree
       def map_items(&block)
         items = validate_json.dig(:items)
         items.map.with_index(&block)
-        status_worker&.total(items.count)
       rescue JSON::ParserError
         raise ImportError, t('invalid_json.default')
       end

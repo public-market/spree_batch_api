@@ -21,7 +21,7 @@
         <tr data-hook="admin_uploads_index_rows" class="<%= cycle('odd', 'even') %>" id="<%= dom_id upload %>">
           <td><%= l(upload.created_at) %></td>
           <td><%= upload.job_id %></td>
-          <td><%= upload.status.humanize %></td>
+          <td><%= upload.status.humanize %> (<%= upload.processed %>/<%= upload.total %>)</td>
           <td class="actions actions-2 text-right">
             <%= link_to_with_icon 'eye-open', 'View', admin_upload_path(upload), no_text: true, class: 'btn btn-primary btn-sm' if can?(:show, upload) %>
           </td>

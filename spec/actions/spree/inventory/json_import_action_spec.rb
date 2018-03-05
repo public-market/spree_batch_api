@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe Spree::Inventory::JsonImportAction, type: :action do
-  subject(:call) { described_class.call(nil, payload) }
+describe Spree::Inventory::JsonImportAction, type: :action, run_jobs: true do
+  subject(:call) { described_class.call(payload, upload: upload) }
 
+  let(:upload) { create(:upload) }
   let(:payload) { nil }
 
   it { expect { call }.to raise_error(Spree::ImportError, 'Empty JSON payload') }
@@ -28,12 +29,13 @@ describe Spree::Inventory::JsonImportAction, type: :action do
   context 'when json have wrong items' do
     let(:payload) { '{ "items": [{"id": "some"}] }' }
 
-    it {
-      expect { call }.to raise_error do |error|
-        expect(error).to be_a(Spree::ImportError)
-        expect(error.message).to match('Item 0 invalid')
-        expect(error.object).to include(:sku)
-      end
-    }
+    before do
+      call
+      upload.reload
+    end
+
+    it { expect(upload.total).to eq(1) }
+    it { expect(upload.processed).to eq(1) }
+    it { expect(upload.upload_errors.count).to eq(1) }
   end
 end

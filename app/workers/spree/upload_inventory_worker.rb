@@ -1,10 +1,9 @@
 require 'sidekiq'
-require 'sidekiq-status'
 
 module Spree
   class UploadInventoryWorker
     include Sidekiq::Worker
-    include Sidekiq::Status::Worker
+    sidekiq_options queue: :upload, retry: false, backtrace: true
 
     attr_reader :upload
 
@@ -12,17 +11,7 @@ module Spree
       @upload = Upload.find_by(id: upload_id)
 
       local_file = filepath
-      begin
-        upload_action(format, local_file)
-        upload.complete!
-      rescue Spree::ImportError => e
-        catch_error(e)
-        upload.fail!
-      end
-    end
-
-    def catch_error(error)
-      upload.upload_errors.create(message: error.message)
+      upload_action(format, local_file)
     end
 
     private
@@ -31,9 +20,9 @@ module Spree
       case format
       when 'json'
         payload = File.read(local_file)
-        Inventory::JsonImportAction.call(self, payload, options: options)
+        Inventory::JsonImportAction.call(payload, upload: upload, options: options)
       when 'csv'
-        Inventory::CSVImportAction.call(self, local_file, options: options)
+        Inventory::CSVImportAction.call(local_file, upload: upload, options: options)
       end
     end
 

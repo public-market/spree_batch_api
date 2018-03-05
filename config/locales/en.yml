@@ -15,13 +15,16 @@ en:
         csv_import_action:
           invalid_csv:
             default: CSV file is invalid
-          invalid_item: 'Item %{index} invalid: %{messages}'
         json_import_action:
           empty_payload: Empty JSON payload
           invalid_json:
             default: "Payload JSON is invalid"
             hash: "Root of JSON should be an object"
             schema: 'JSON schema is invalid: %{messages}'
-          invalid_item: 'Item %{index} invalid: %{messages}'
         upload_file_action:
           unsupported_format: File format is not supported
+  workers:
+    spree:
+      import_inventory_item_worker:
+        invalid_item: 'Item %{index} invalid: %{messages}'
+

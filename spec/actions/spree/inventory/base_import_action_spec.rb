@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Spree::Inventory::BaseImportAction, type: :action do
+RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true do
   class FakeImportAction < Spree::Inventory::BaseImportAction
     param :items
 
@@ -9,9 +9,9 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action do
     end
   end
 
-  before { FakeImportAction.call(status_worker, items) }
+  before { FakeImportAction.call(items, upload: upload) }
 
-  let(:status_worker) { instance_spy('StatusWorker') }
+  let(:upload) { create(:upload) }
   let(:item) do
     {
       ean: '9780979728303',
@@ -27,13 +27,14 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action do
   context 'when no items' do
     let(:items) { [] }
 
-    it { expect(status_worker).not_to have_received(:at) }
+    it { expect(upload.total).to eq(0) }
   end
 
   context 'when pass 1 item' do
     let(:items) { [item] }
 
-    it { expect(status_worker).to have_received(:at).once }
+    it { expect(upload.total).to eq(1) }
+    it { expect(upload.reload.processed).to eq(1) }
     it { expect(Spree::Product.count).to eq(1) }
     it { expect(Spree::Variant.count).to eq(2) }
   end
@@ -41,7 +42,8 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action do
   context 'when have error' do
     let(:items) { [{ ean: 'UNKNOWN' }] }
 
-    it { expect(status_worker).to have_received(:at).once }
-    it { expect(status_worker).to have_received(:catch_error).once }
+    it { expect(upload.total).to eq(1) }
+    it { expect(upload.reload.processed).to eq(1) }
+    it { expect(upload.reload.upload_errors.count).to eq(1) }
   end
 end

@@ -11,7 +11,6 @@ module Spree
           yield(item_json(row), index)
           index += 1
         end
-        status_worker&.total(index)
       rescue Errno::ENOENT
         raise ImportError, t('invalid_csv.default')
       end

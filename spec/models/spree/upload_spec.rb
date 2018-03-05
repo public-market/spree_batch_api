@@ -8,10 +8,14 @@ RSpec.describe Spree::Upload, type: :model do
   end
 
   describe 'state machine' do
-    let(:upload) { create :upload }
+    let(:upload) { create :upload, total: 5 }
 
-    before { upload.complete! }
+    it { expect(upload.reload.status).to eq('processing') }
 
-    it { expect(upload.reload.status).to eq('completed') }
+    context 'when processed' do
+      before { upload.update(processed: 5) }
+
+      it { expect(upload.reload.status).to eq('completed') }
+    end
   end
 end

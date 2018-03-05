@@ -4,6 +4,8 @@
 <br>
 <strong>Status:</strong> <%= @upload.status.humanize %>
 <br>
+<strong>Progress:</strong> <%= @upload.processed %>/<%= @upload.total %>
+<br>
 <div data-hook="admin_upload_fields"></div>
 
 <% if @upload.upload_errors.any? %>

@@ -27,7 +27,7 @@ module Spree
       end
 
       def create_upload
-        Upload.create(status: :processing, **upload_options)
+        Upload.create(**upload_options)
       end
     end
   end

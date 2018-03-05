@@ -17,10 +17,12 @@ describe Spree::UploadInventoryWorker, type: :worker do
     end
 
     describe 'perform worker', run_jobs: true do
-      it { expect { perform }.to change(Spree::Product, :count).by(5) }
-      it { expect { perform }.to change(Spree::Variant, :count).by(10) }
-      it { expect(Sidekiq::Status.total(perform)).to eq(5) }
-      it { expect(Sidekiq::Status.at(perform)).to eq(5) }
+      before { perform }
+
+      it { expect(Spree::Product.count).to eq(5) }
+      it { expect(Spree::Variant.count).to eq(10) }
+      it { expect(upload.reload.total).to eq(5) }
+      it { expect(upload.reload.processed).to eq(5) }
     end
   end
 end
