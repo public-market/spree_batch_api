@@ -11,6 +11,7 @@ module Spree
                          .accessible_by(current_ability, :index)
                          .where(payment_state: :paid)
                          .where('spree_orders.updated_at > ?', @from)
+                         .order('spree_orders.updated_at DESC')
                          .to_a
 
           respond_with(@orders)
