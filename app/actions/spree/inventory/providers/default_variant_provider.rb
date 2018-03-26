@@ -19,7 +19,7 @@ module Spree
         optional(:seller).str?
       end
 
-      class DefaultVariantProvider < Spree::BaseAction
+      class DefaultVariantProvider < Spree::BaseAction # rubocop:disable Metrics/ClassLength
         param :item_json
         option :options, optional: true, default: proc { {} }
 
@@ -60,6 +60,7 @@ module Spree
                  .first
         end
 
+        # rubocop:disable Metrics/AbcSize
         def create_product(isbn)
           metadata = metadata_provider.call(isbn)
           raise ImportError, t('no_isbn') if metadata.blank?
@@ -77,6 +78,7 @@ module Spree
 
           product
         end
+        # rubocop:enable Metrics/AbcSize
 
         def build_new_product(metadata)
           Product.new(

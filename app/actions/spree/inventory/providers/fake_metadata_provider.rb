@@ -8,6 +8,7 @@ module Spree
 
         UNKNOWN_ISBN = 'UNKNOWN_ISBN'.freeze
 
+        # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         def call
           return if isbn == UNKNOWN_ISBN
 
@@ -36,6 +37,7 @@ module Spree
             taxons: %w[General Book]
           }
         end
+        # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
         def book_title
           @book_title ||= FFaker::Book.title

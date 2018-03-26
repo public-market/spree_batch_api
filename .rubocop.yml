@@ -4,9 +4,14 @@ AllCops:
   Include:
     - '**/Gemfile'
     - '**/Rakefile'
+    - '**/Appraisals'
+    - '**/Guardfile'
   Exclude:
     - 'spec/dummy/**/*'
     - 'lib/generators/**/*'
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
 
 Rails:
   Enabled: true

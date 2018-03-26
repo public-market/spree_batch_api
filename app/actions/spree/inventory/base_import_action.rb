@@ -9,7 +9,8 @@ module Spree
         map_items do |item_json, index|
           Spree::ImportInventoryItemWorker.perform_async(
             item_json,
-            options.merge(upload_id: upload.id, index: index))
+            options.merge(upload_id: upload.id, index: index)
+          )
           total += 1
         end
 

@@ -2,10 +2,10 @@ module Spree
   module Api
     module V1
       class OrdersController < Spree::Api::BaseController
-        def fetch
+        def fetch # rubocop:disable Metrics/AbcSize
           authorize! :index, Order
 
-          @from = Time.at(fetch_params[:from_timestamp].to_i)
+          @from = Time.zone.at(fetch_params[:from_timestamp].to_i)
           @orders = Order.includes(line_items: :variant, ship_address: %i[country state])
                          .complete
                          .accessible_by(current_ability, :index)
@@ -17,6 +17,7 @@ module Spree
           respond_with(@orders)
         end
 
+        # rubocop:disable Metrics/MethodLength
         def update_shipments
           authorize! :create, Shipment
 
@@ -28,11 +29,12 @@ module Spree
               options = order_update_params(order).merge(user: current_api_user)
               UpdateOrderShipmentAction.new(options).call
               @success += 1
-            rescue => e
+            rescue StandardError => e
               @failures[index] = e.message.gsub('Spree::', '')
             end
           end
         end
+        # rubocop:enable Metrics/MethodLength
 
         private
 

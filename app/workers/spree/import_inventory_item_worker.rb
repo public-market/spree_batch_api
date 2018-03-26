@@ -5,6 +5,7 @@ module Spree
     include Sidekiq::Worker
     sidekiq_options queue: :upload, retry: 3, backtrace: true
 
+    # rubocop:disable Metrics/MethodLength
     def perform(item_json, options)
       @upload = Upload.find_by(id: options['upload_id'])
 
@@ -19,8 +20,9 @@ module Spree
         ))
       end
 
-      @upload.increment!(:processed)
+      @upload.increment!(:processed) # rubocop:disable Rails/SkipsModelValidations
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 

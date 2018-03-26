@@ -5,6 +5,9 @@ inherit_from: ../.rubocop.yml
 Metrics/BlockLength:
   Enabled: false
 
+Metrics/LineLength:
+  Enabled: false
+
 RSpec/NestedGroups:
   Max: 6
 
@@ -13,6 +16,9 @@ RSpec/MultipleExpectations:
 
 RSpec/ExampleLength:
   Max: 6
+
+RSpec/AnyInstance:
+  Enabled: false
 
 Style/BlockDelimiters:
   Enabled: false

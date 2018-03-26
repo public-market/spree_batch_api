@@ -3,7 +3,7 @@ module Spree
     class UploadsController < ResourceController
       private
 
-      def collection
+      def collection # rubocop:disable Metrics/AbcSize
         params[:q] = {} if params[:q].blank?
         uploads = super.order(created_at: :desc)
         @search = uploads.ransack(params[:q])
