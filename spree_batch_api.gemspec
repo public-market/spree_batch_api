@@ -8,12 +8,11 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_batch_api'
   s.version     = SpreeBatchApi.version
-  s.summary     = 'Add extension summary here'
-  s.description = 'Add (optional) extension description here'
+  s.summary     = 'Batch API extension allows to update product/inventory/orders in batches.'
   s.required_ruby_version = '>= 2.2.7'
 
-  s.author    = 'You'
-  s.email     = 'you@example.com'
+  s.author    = 'Public Market Team'
+  s.email     = 'team@publicmarket.io'
   s.homepage  = 'https://github.com/public-market/spree_batch_api'
   s.license = 'BSD-3-Clause'
 

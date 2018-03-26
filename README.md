@@ -7,7 +7,7 @@ Batch API extension allows to update product/inventory/orders in batches.
 
 1. Add this extension to your Gemfile with this line:
   ```ruby
-  gem 'spree_batch_api', github: 'Abundance-Coin/spree_batch_api'
+  gem 'spree_batch_api', github: 'public-market/spree_batch_api'
   ```
 
 2. Install the gem using Bundler:
@@ -47,4 +47,4 @@ If you'd like to contribute, please take a look at the
 [instructions](CONTRIBUTING.md) for installing dependencies and crafting a good
 pull request.
 
-Copyright (c) 2017 Public Market Team, released under the New BSD License
+Copyright (c) 2018 Public Market Team, released under the New BSD License
