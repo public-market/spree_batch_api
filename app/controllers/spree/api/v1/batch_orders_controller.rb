@@ -1,7 +1,7 @@
 module Spree
   module Api
     module V1
-      class OrdersController < Spree::Api::BaseController
+      class BatchOrdersController < Spree::Api::BaseController
         def fetch # rubocop:disable Metrics/AbcSize
           authorize! :index, Order
 
