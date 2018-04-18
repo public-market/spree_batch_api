@@ -14,9 +14,6 @@ require 'ffaker'
 # in spec/support/ and its subdirectories.
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 
-# Requires factories defined in lib/spree_batch_api/factories.rb
-require 'spree_batch_api/factories'
-
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
