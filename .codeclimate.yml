@@ -1,0 +1,32 @@
+version: '2'
+plugins:
+  # common
+  fixme:
+    enabled: true
+  git-legal:
+    enabled: true
+  markdownlint:
+    enabled: true
+  # ruby/rails
+  brakeman:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  flog:
+    enabled: true
+  rubocop:
+    enabled: true
+    channel: rubocop-0-55
+  # css
+  csslint:
+    enabled: true
+  scss-lint:
+    enabled: true
+  stylelint:
+    enabled: true
+  # js
+  eslint:
+    enabled: true
+
+exclude_patterns:
+- "db/"
