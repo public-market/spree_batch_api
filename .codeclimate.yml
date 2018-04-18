@@ -10,8 +10,6 @@ plugins:
   # ruby/rails
   brakeman:
     enabled: true
-  bundler-audit:
-    enabled: true
   flog:
     enabled: true
   rubocop:
