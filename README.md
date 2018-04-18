@@ -1,28 +1,35 @@
-Spree Batch API [![Build Status](https://travis-ci.org/public-market/spree_batch_api.svg?branch=master)](https://travis-ci.org/public-market/spree_batch_api)
-=================
+<!-- markdownlint-disable MD041 -->
+[![Build Status](https://travis-ci.org/public-market/spree_batch_api.svg?branch=master)](https://travis-ci.org/public-market/spree_batch_api)
+[![Maintainability](https://api.codeclimate.com/v1/badges/27c408372144ced90920/maintainability)](https://codeclimate.com/github/public-market/spree_batch_api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/27c408372144ced90920/test_coverage)](https://codeclimate.com/github/public-market/spree_batch_api/test_coverage)
+<!-- markdownlint-enable MD041 -->
+
+# Spree Batch API
 
 Batch API extension allows to update product/inventory/orders in batches.
 
 ## Installation
 
 1. Add this extension to your Gemfile with this line:
-  ```ruby
-  gem 'spree_batch_api', github: 'public-market/spree_batch_api'
-  ```
 
-2. Install the gem using Bundler:
-  ```ruby
-  bundle install
-  ```
+    ```ruby
+    gem 'spree_batch_api', github: 'public-market/spree_batch_api'
+    ```
 
-3. Copy & run migrations
-  ```ruby
-  bundle exec rails g spree_batch_api:install
-  ```
+1. Install the gem using Bundler:
+    ```ruby
+    bundle install
+    ```
 
-4. Restart your server
+1. Copy & run migrations
 
-  If your server was running, restart it so that it can find the assets properly.
+    ```ruby
+    bundle exec rails g spree_batch_api:install
+    ```
+
+1. Restart your server
+
+    If your server was running, restart it so that it can find the assets properly.
 
 ## Testing
 
@@ -39,7 +46,6 @@ Simply add this require statement to your spec_helper:
 ```ruby
 require 'spree_batch_api/factories'
 ```
-
 
 ## Contributing
 

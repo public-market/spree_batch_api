@@ -11,10 +11,6 @@ env:
   - DB=postgres
   - DB=mysql
 
-# gemfile:
-#   - gemfiles/spree_3_4.gemfile
-#   - gemfiles/spree_master.gemfile
-
 script:
   - bundle exec rake test_app
   - bundle exec rake spec
@@ -26,3 +22,11 @@ rvm:
 
 before_install:
   - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+after_script:
+  - ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $TRAVIS_TEST_RESULT
