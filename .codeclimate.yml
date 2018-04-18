@@ -14,16 +14,11 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: rubocop-0-55
+    channel: rubocop-0-54 # https://github.com/codeclimate/codeclimate-rubocop/branches/all?utf8=%E2%9C%93&query=channel%2Frubocop
   # css
   csslint:
     enabled: true
   scss-lint:
-    enabled: true
-  stylelint:
-    enabled: true
-  # js
-  eslint:
     enabled: true
 
 exclude_patterns:
