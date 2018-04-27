@@ -1,6 +1,6 @@
 # Spree Batch API
 
-[![Build Status](https://travis-ci.org/public-market/spree_batch_api.svg?branch=master)](https://travis-ci.org/public-market/spree_batch_api)
+[![Build Status](https://travis-ci.org/abundance-labs/spree_batch_api.svg?branch=master)](https://travis-ci.org/abundance-labs/spree_batch_api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7f68249b09662c08ec62/maintainability)](https://codeclimate.com/github/abundance-labs/spree_batch_api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7f68249b09662c08ec62/test_coverage)](https://codeclimate.com/github/abundance-labs/spree_batch_api/test_coverage)
 
