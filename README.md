@@ -1,3 +1,5 @@
+![Abundance Labds](.github/AbundanceLabs_readme_banner.png)
+
 # Spree Batch API
 
 [![Build Status](https://travis-ci.org/abundance-labs/spree_batch_api.svg?branch=master)](https://travis-ci.org/abundance-labs/spree_batch_api)
