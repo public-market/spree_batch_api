@@ -59,7 +59,8 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       it { expect(variant).not_to eq(product.master) }
       it { expect(variant.sku).to eq(item_json[:sku]) }
       it { expect(variant.option_value('condition')).to eq(item_json[:condition]) }
-      it { expect(variant.price).to be > 0 }
+      it { expect(variant.price).to eq(item_json[:price]) }
+      it { expect(variant.cost_price).to eq(item_json[:price]) }
       it { expect(variant.total_on_hand).to eq(1) }
 
       context 'with images', images: true do
@@ -93,6 +94,7 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
       it { expect { variant }.to change(Spree::Product, :count).by(0) }
       it { expect(variant.product.variants.count).to eq(1) }
       it { expect(variant.price).to eq(10.5) }
+      it { expect(variant.cost_price).to eq(10.5) }
       it { expect(variant.total_on_hand).to eq(2) }
     end
   end

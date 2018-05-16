@@ -126,7 +126,7 @@ module Spree
           variant = Variant.unscoped
                            .where(sku: item[:sku], product: product)
                            .first_or_initialize
-          variant.price = item[:price]
+          variant.price = variant.cost_price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
           update_variant_hook(variant, item) # run this before options association set
           variant.options = [{ name: CONDITION_OPTION_TYPE, value: item[:condition] }]
