@@ -123,9 +123,7 @@ module Spree
         end
 
         def upsert_variant(product, item)
-          variant = Variant.unscoped
-                           .where(sku: item[:sku], product: product)
-                           .first_or_initialize
+          variant = fetch_variant(product, item)
           variant.price = variant.cost_price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
           update_variant_hook(variant, item) # run this before options association set
@@ -134,6 +132,10 @@ module Spree
           variant.save!
 
           process_variant_quantity(variant, item[:quantity])
+        end
+
+        def fetch_variant(product, item)
+          Variant.unscoped.where(sku: item[:sku], product: product).first_or_initialize
         end
 
         def process_variant_quantity(variant, quantity)
