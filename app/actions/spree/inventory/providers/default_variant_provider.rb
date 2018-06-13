@@ -89,7 +89,7 @@ module Spree
             meta_title: metadata[:title],
             meta_keywords: metadata.dig(:properties, :subject),
             shipping_category: ShippingCategory.first_or_create(name: 'Default'),
-            available_on: Time.current
+            available_on: metadata[:available_on].presence || Time.current
           )
         end
 
