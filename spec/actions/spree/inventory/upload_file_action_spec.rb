@@ -15,4 +15,17 @@ RSpec.describe Spree::Inventory::UploadFileAction, type: :action do
     it { expect { upload }.not_to change(Spree::Upload, :count) }
     it { expect(upload[:errors]).to eq(I18n.t('actions.spree.inventory.upload_file_action.unsupported_format')) }
   end
+
+  describe '#check_product_type' do
+    it { expect { upload }.to change(Spree::Upload, :count).by(1) }
+
+    context 'with not supported product type' do
+      subject(:upload) { described_class.call(file_format, 'ean', product_type: product_type) }
+
+      let(:product_type) { 'electronics' }
+
+      it { expect { upload }.not_to change(Spree::Upload, :count) }
+      it { expect(upload[:errors]).to eq(I18n.t('actions.spree.inventory.upload_file_action.unsupported_product_type')) }
+    end
+  end
 end

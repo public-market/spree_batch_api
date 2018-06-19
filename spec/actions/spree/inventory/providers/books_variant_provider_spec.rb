@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :action do
+RSpec.describe Spree::Inventory::Providers::BooksVariantProvider, type: :action do
   subject(:variant) { described_class.call(item_json, options: options) }
 
   let(:options) { {} }

@@ -11,7 +11,9 @@ en:
       inventory:
         providers:
           default_variant_provider:
-            no_isbn: 'Unknown ISBN found'
+            metadata_not_found: 'Metadata for given identifier not found'
+          books_variant_provider:
+            metadata_not_found: 'Unknown ISBN found'
         csv_import_action:
           invalid_csv:
             default: CSV file is invalid
@@ -23,8 +25,10 @@ en:
             schema: 'JSON schema is invalid: %{messages}'
         upload_file_action:
           unsupported_format: File format is not supported
+          unsupported_product_type: Provided product type is not supported
   workers:
     spree:
       import_inventory_item_worker:
         invalid_item: 'Item %{index} invalid: %{messages}'
+        unsupported_variant_provider: 'Variant provider for product type %{product_type} not found'
 

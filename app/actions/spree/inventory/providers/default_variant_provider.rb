@@ -3,20 +3,12 @@ require 'dry-validation'
 module Spree
   module Inventory
     module Providers
-      PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
-      TAXONOMY = 'Categories'.freeze
-      ISBN_PROPERTY = 'isbn'.freeze
-      CONDITION_OPTION_TYPE = 'condition'.freeze
-
       # Default variant provider inventory format
       UploadItemSchema = ::Dry::Validation.Schema do
-        required(:ean).filled(:str?)
         required(:sku).filled(:str?)
         required(:quantity).filled(:int?)
         required(:price).filled(:decimal?)
-        required(:condition).value(included_in?: PERMITTED_CONDITIONS)
         optional(:notes).str?
-        optional(:seller).str?
       end
 
       class DefaultVariantProvider < Spree::BaseAction # rubocop:disable Metrics/ClassLength
@@ -44,33 +36,34 @@ module Spree
         end
 
         def process_item(hash)
-          isbn = hash[:ean]
-          product = find_product(isbn)
+          identifier = product_identifier(hash)
+          product = find_product(identifier)
 
           Product.transaction do
-            product ||= create_product(isbn)
+            product ||= create_product(identifier)
             upsert_variant(product, hash)
           end
         end
 
-        def find_product(isbn)
-          Product.joins(:properties)
-                 .where(spree_properties: { name: ISBN_PROPERTY },
-                        spree_product_properties: { value: isbn })
-                 .first
+        def product_identifier(_hash)
+          raise NotImplementedError, 'product_identifier'
+        end
+
+        def find_product(_identifier)
+          raise NotImplementedError, 'find_product'
         end
 
         # rubocop:disable Metrics/AbcSize
-        def create_product(isbn)
-          metadata = metadata_provider.call(isbn)
-          raise ImportError, t('no_isbn') if metadata.blank?
+        def create_product(identifier)
+          metadata = metadata_provider.call(identifier)
+          raise ImportError, t('metadata_not_found') if metadata.blank?
 
           create_stock_location
 
           product = build_new_product(metadata)
           build_product_master(product, metadata)
 
-          product.product_option_types.build(option_type: condition_option_type)
+          product.product_option_types.build(product_option_types_attrs)
           product.save!
 
           set_properties(product, metadata[:properties])
@@ -80,18 +73,19 @@ module Spree
         end
         # rubocop:enable Metrics/AbcSize
 
+        def product_option_types_attrs
+          {}
+        end
+
         def build_new_product(metadata)
-          Product.new(
+          Product.new(product_attrs(metadata))
+        end
+
+        def product_attrs(metadata)
+          {
             name: metadata[:title],
-            price: metadata[:price],
-            description: metadata[:description],
-            meta_description: metadata[:description],
-            meta_title: metadata[:title],
-            meta_keywords: metadata.dig(:properties, :subject),
-            shipping_category: ShippingCategory.first_or_create(name: 'Default'),
-            available_on: metadata[:available_on].presence || Time.current,
-            discontinue_on: metadata[:discontinue_on].presence
-          )
+            price: metadata[:price]
+          }
         end
 
         def build_product_master(product, metadata)
@@ -128,11 +122,15 @@ module Spree
           variant.price = variant.cost_price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
           update_variant_hook(variant, item) # run this before options association set
-          variant.options = [{ name: CONDITION_OPTION_TYPE, value: item[:condition] }]
+          variant.options = variant_options(item)
 
           variant.save!
 
           process_variant_quantity(variant, item[:quantity])
+        end
+
+        def variant_options(_item)
+          []
         end
 
         def fetch_variant(product, item)
@@ -145,30 +143,8 @@ module Spree
           variant
         end
 
-        def variant_attributes(metadata)
-          dims = metadata[:dimensions]
-          {
-            is_master: true,
-            weight: dims[:weight],
-            height: dims[:height],
-            width: dims[:width],
-            depth: dims[:depth]
-          }
-        end
-
-        def isbn_property
-          Property.create_with(presentation: I18n.t('properties.isbn'))
-                  .find_or_create_by(name: ISBN_PROPERTY)
-        end
-
-        def condition_option_type
-          option_type_attrs = {
-            name: CONDITION_OPTION_TYPE,
-            presentation: 'Condition',
-            option_values_attributes: PERMITTED_CONDITIONS.map { |c| { name: c, presentation: c } }
-          }
-
-          OptionType.where(name: option_type_attrs[:name]).first_or_create(option_type_attrs)
+        def variant_attributes(_metadata)
+          {}
         end
 
         def create_stock_location

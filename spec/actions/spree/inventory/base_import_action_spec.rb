@@ -9,8 +9,9 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
     end
   end
 
-  before { FakeImportAction.call(items, upload: upload) }
+  before { FakeImportAction.call(items, upload: upload, options: opts) }
 
+  let(:opts) { {} }
   let(:upload) { create(:upload) }
   let(:item) do
     {
@@ -30,20 +31,41 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
     it { expect(upload.total).to eq(0) }
   end
 
-  context 'when pass 1 item' do
+  context 'when product type is not specified' do
     let(:items) { [item] }
+    let(:product_type) { :ffake }
+    let(:opts) { { product_type: product_type } }
 
     it { expect(upload.total).to eq(1) }
     it { expect(upload.reload.processed).to eq(1) }
-    it { expect(Spree::Product.count).to eq(1) }
-    it { expect(Spree::Variant.count).to eq(2) }
+    it do
+      expect(upload.reload.upload_errors.first.message).to eq(
+        I18n.t('workers.spree.import_inventory_item_worker.invalid_item',
+          index: 0,
+          messages: I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type)
+        )
+      )
+    end
   end
 
-  context 'when have error' do
-    let(:items) { [{ ean: 'UNKNOWN' }] }
+  context 'when product type is specified' do
+    let(:opts) { { product_type: :books } }
 
-    it { expect(upload.total).to eq(1) }
-    it { expect(upload.reload.processed).to eq(1) }
-    it { expect(upload.reload.upload_errors.count).to eq(1) }
+    context 'when pass 1 item' do
+      let(:items) { [item] }
+
+      it { expect(upload.total).to eq(1) }
+      it { expect(upload.reload.processed).to eq(1) }
+      it { expect(Spree::Product.count).to eq(1) }
+      it { expect(Spree::Variant.count).to eq(2) }
+    end
+
+    context 'when have error' do
+      let(:items) { [{ ean: 'UNKNOWN' }] }
+
+      it { expect(upload.total).to eq(1) }
+      it { expect(upload.reload.processed).to eq(1) }
+      it { expect(upload.reload.upload_errors.count).to eq(1) }
+    end
   end
 end

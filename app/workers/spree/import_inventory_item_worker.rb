@@ -4,11 +4,12 @@ module Spree
   class ImportInventoryItemWorker
     include Sidekiq::Worker
     sidekiq_options queue: :upload, retry: 3, backtrace: true
+
     def perform(item_json, options)
       upload = self.class.load_upload(options)
 
       begin
-        inventory_provider.call(item_json.with_indifferent_access, options: options.with_indifferent_access)
+        inventory_provider(options['product_type']).call(item_json.with_indifferent_access, options: options.with_indifferent_access)
       rescue ImportError => e
         self.class.catch_error(upload, options, e.message)
       end
@@ -24,8 +25,10 @@ module Spree
       catch_error(upload, options, msg['error_message'])
     end
 
-    def inventory_provider
-      Spree::Inventory::Providers::DefaultVariantProvider
+    def inventory_provider(product_type = '')
+      "Spree::Inventory::Providers::#{product_type.parameterize(separator: '_').camelize}VariantProvider".constantize
+    rescue NameError
+      raise Spree::ImportError, I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type)
     end
 
     def self.load_upload(options)
