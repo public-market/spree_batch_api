@@ -26,7 +26,7 @@ module Spree
     end
 
     def inventory_provider(product_type = '')
-      "Spree::Inventory::Providers::#{product_type.parameterize(separator: '_').camelize}VariantProvider".constantize
+      "Spree::Inventory::Providers::#{product_type.parameterize(separator: '_').camelize}::VariantProvider".constantize
     rescue NameError
       raise Spree::ImportError, I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type)
     end

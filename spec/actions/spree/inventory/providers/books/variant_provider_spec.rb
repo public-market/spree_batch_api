@@ -1,13 +1,9 @@
 require 'spec_helper'
 
-RSpec.describe Spree::Inventory::Providers::BooksVariantProvider, type: :action do
+RSpec.describe Spree::Inventory::Providers::Books::VariantProvider, type: :action do
   subject(:variant) { described_class.call(item_json, options: options) }
 
   let(:options) { {} }
-
-  describe 'metadata provider' do
-    it { expect(Spree::Config.product_metadata_provider).to eq('Spree::Inventory::Providers::FakeMetadataProvider') }
-  end
 
   describe 'validation' do
     let(:item_json) { { ean: 'isbn' } }
@@ -29,7 +25,7 @@ RSpec.describe Spree::Inventory::Providers::BooksVariantProvider, type: :action 
     end
 
     context 'with unknown isbn' do
-      let(:isbn) { Spree::Inventory::Providers::FakeMetadataProvider::UNKNOWN_ISBN }
+      let(:isbn) { Spree::Inventory::Providers::Books::MetadataProvider::UNKNOWN_ISBN }
 
       it { expect { variant }.to raise_error(Spree::ImportError, 'Unknown ISBN found') }
     end
@@ -63,7 +59,7 @@ RSpec.describe Spree::Inventory::Providers::BooksVariantProvider, type: :action 
       it { expect(variant.cost_price).to eq(item_json[:price]) }
       it { expect(variant.total_on_hand).to eq(1) }
 
-      context 'with images', images: true do
+      context 'with images', vcr: true, images: true do
         it { expect(product.images.count).to eq(1) }
       end
 

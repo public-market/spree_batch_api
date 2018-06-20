@@ -55,7 +55,7 @@ module Spree
 
         # rubocop:disable Metrics/AbcSize
         def create_product(identifier)
-          metadata = metadata_provider.call(identifier)
+          metadata = find_metadata(identifier)
           raise ImportError, t('metadata_not_found') if metadata.blank?
 
           create_stock_location
@@ -73,6 +73,14 @@ module Spree
         end
         # rubocop:enable Metrics/AbcSize
 
+        def find_metadata(identifier)
+          metadata_provider.call(identifier)
+        end
+
+        def metadata_provider
+          self.class.parent::MetadataProvider
+        end
+
         def product_option_types_attrs
           {}
         end
@@ -89,7 +97,7 @@ module Spree
         end
 
         def build_product_master(product, metadata)
-          product.master.assign_attributes(variant_attributes(metadata))
+          product.master.assign_attributes(master_variant_attributes(metadata))
           return if metadata[:images].blank?
           metadata[:images].each do |img|
             product.master.images.build(
@@ -129,8 +137,8 @@ module Spree
           process_variant_quantity(variant, item[:quantity])
         end
 
-        def variant_options(_item)
-          []
+        def variant_options(item)
+          [{ name: condition_option_name, value: item[:condition] }]
         end
 
         def fetch_variant(product, item)
@@ -143,7 +151,7 @@ module Spree
           variant
         end
 
-        def variant_attributes(_metadata)
+        def master_variant_attributes(_metadata)
           {}
         end
 
@@ -151,12 +159,8 @@ module Spree
           StockLocation.create_with(backorderable_default: false).first_or_create(name: 'default')
         end
 
-        def metadata_provider
-          Spree::Config.product_metadata_provider.constantize
-        end
-
         def taxonomy_name
-          options&.dig(:taxonomy) || TAXONOMY
+          options&.dig(:taxonomy) || self.class.parent::TAXONOMY
         end
 
         def update_variant_hook(variant, item)

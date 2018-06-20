@@ -1,9 +1,13 @@
 RSpec.configure do |config|
   config.before do
-    allow_any_instance_of(Spree::Inventory::Providers::FakeMetadataProvider).to receive(:images).and_return([])
+    %w[Books].each do |type|
+      allow_any_instance_of("Spree::Inventory::Providers::#{type}::MetadataProvider".constantize).to receive(:images).and_return([])
+    end
   end
 
   config.before(:each, images: true) do
-    allow_any_instance_of(Spree::Inventory::Providers::FakeMetadataProvider).to receive(:images).and_call_original
+    %w[Books].each do |type|
+      allow_any_instance_of("Spree::Inventory::Providers::#{type}::MetadataProvider".constantize).to receive(:images).and_call_original
+    end
   end
 end
