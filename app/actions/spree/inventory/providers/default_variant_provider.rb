@@ -114,7 +114,7 @@ module Spree
         end
 
         def categorize(product, taxons)
-          taxonomy = Spree::Taxonomy.create_with(filterable: true).find_or_create_by!(name: taxonomy_name)
+          taxonomy = Spree::Taxonomy.find_or_create_by!(name: taxonomy_name)
 
           parent_taxon = taxonomy.root
           taxons.each do |taxon|
