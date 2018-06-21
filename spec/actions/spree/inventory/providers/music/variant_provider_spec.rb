@@ -19,6 +19,7 @@ RSpec.describe Spree::Inventory::Providers::Music::VariantProvider, type: :actio
         title: 'Goodwill Central Texas',
         artist: 'Jake Donaldson',
         description: 'Wow vinyl',
+        genres: 'Hardcore',
         label: 'Epic',
         label_number: 'PK-32',
         speed: '12'
@@ -52,6 +53,7 @@ RSpec.describe Spree::Inventory::Providers::Music::VariantProvider, type: :actio
       it { expect(product.property(:artist)).not_to be_nil }
       it { expect(product.taxons.count).to eq(1) }
       it { expect(product.taxons.first.taxonomy.name).to eq('Music') }
+      it { expect(product.taxons.first.name).to eq('Hardcore') }
 
       it { expect(variant).not_to be_nil }
       it { expect(variant).not_to eq(product.master) }

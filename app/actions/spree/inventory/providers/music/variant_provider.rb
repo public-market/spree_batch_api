@@ -18,6 +18,7 @@ module Spree
           required(:description).filled(:str?)
           required(:condition).value(included_in?: PERMITTED_VINYL_CONDITIONS)
           optional(:images)
+          optional(:genres).str?
           optional(:notes).str?
           optional(:label).str?
           optional(:label_number).str?
