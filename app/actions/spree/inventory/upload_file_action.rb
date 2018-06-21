@@ -22,6 +22,10 @@ module Spree
         { errors: e.message.to_s }
       end
 
+      def self.supported_product_types
+        %w[books music]
+      end
+
       private
 
       def check_format
@@ -29,15 +33,11 @@ module Spree
       end
 
       def check_product_type
-        raise Spree::ImportError, t('unsupported_product_type') unless supported_product_types.include?(product_type)
+        raise Spree::ImportError, t('unsupported_product_type') unless self.class.supported_product_types.include?(product_type)
       end
 
       def create_upload
         Upload.create(**upload_options)
-      end
-
-      def supported_product_types
-        %w[books]
       end
     end
   end
