@@ -29,7 +29,7 @@ module Spree
         end
 
         def validate_item(item_json)
-          result = UploadItemSchema.call(item_json)
+          result = self.class.parent::UploadItemSchema.call(item_json)
           messages = result.messages
           raise ImportError.new(messages.to_s, messages) if result.failure?
           result.to_h

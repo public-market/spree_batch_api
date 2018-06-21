@@ -25,6 +25,19 @@ RSpec.describe Spree::Inventory::Providers::Music::VariantProvider, type: :actio
       }
     end
 
+    context 'when is invalid' do
+      let(:item_json) do
+        {
+          sku: sku,
+          quantity: '1',
+          price: '9.61',
+          condition: 'G+'
+        }
+      end
+
+      it { expect { variant }.to raise_error(Spree::ImportError) }
+    end
+
     context 'when new product' do
       subject(:product) { variant.product }
 

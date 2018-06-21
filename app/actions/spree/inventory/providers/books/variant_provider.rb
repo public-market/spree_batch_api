@@ -7,7 +7,7 @@ module Spree
         PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
         TAXONOMY = 'Categories'.freeze
 
-        UploadtItemSchema = ::Dry::Validation.Schema do
+        UploadItemSchema = ::Dry::Validation.Schema do
           required(:ean).filled(:str?)
           required(:sku).filled(:str?)
           required(:quantity).filled(:int?)
