@@ -76,7 +76,7 @@ module Spree
             option_type_attrs = {
               name: condition_option_name,
               presentation: 'Condition',
-              option_values_attributes: PERMITTED_VINYL_CONDITIONS.map { |c| { name: c, presentation: c } }
+              option_values_attributes: PERMITTED_VINYL_CONDITIONS.map { |c| { name: c, presentation: t("option_values.#{condition_option_name}.#{c}") } }
             }
 
             OptionType.where(name: option_type_attrs[:name]).first_or_create(option_type_attrs)

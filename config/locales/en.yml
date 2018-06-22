@@ -10,15 +10,29 @@ en:
     vinyl_speed: Speed
     music_label: Label
     music_label_number: Label Number
+
   actions:
     spree:
       inventory:
         providers:
           default_variant_provider:
             metadata_not_found: 'Metadata for given identifier not found'
+
           books:
             variant_provider:
               metadata_not_found: 'Unknown ISBN found'
+
+          music:
+            variant_provider:
+              option_values:
+                vinyl_condition:
+                  'SS': 'Like New — Still Sealed'
+                  'M-': 'Like New — Mint Condition'
+                  'VG+': "Like New — Very Good 'Plus'"
+                  'VG': "Used — Very Good"
+                  'VG-': "Used — Very Good 'Minus'"
+                  'G+': "Used — Good 'Plus'"
+
         csv_import_action:
           invalid_csv:
             default: CSV file is invalid
@@ -31,6 +45,7 @@ en:
         upload_file_action:
           unsupported_format: File format is not supported
           unsupported_product_type: Provided product type is not supported
+
   workers:
     spree:
       import_inventory_item_worker:

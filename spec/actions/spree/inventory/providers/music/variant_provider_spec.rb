@@ -58,7 +58,8 @@ RSpec.describe Spree::Inventory::Providers::Music::VariantProvider, type: :actio
       it { expect(variant).not_to be_nil }
       it { expect(variant).not_to eq(product.master) }
       it { expect(variant.sku).to eq(item_json[:sku]) }
-      it { expect(variant.option_value('vinyl_condition')).to eq(item_json[:condition]) }
+      it { expect(variant.option_values.first.name).to eq(item_json[:condition]) }
+      it { expect(variant.option_value('vinyl_condition')).to eq("Used — Good 'Plus'") }
       it { expect(variant.price).to eq(item_json[:price]) }
       it { expect(variant.cost_price).to eq(item_json[:price]) }
       it { expect(variant.total_on_hand).to eq(1) }
