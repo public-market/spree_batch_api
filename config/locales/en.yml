@@ -6,10 +6,10 @@ en:
     isbn: ISBN
     author: Author
     published_at: Published
-    music_format: Format
-    vinyl_speed: Speed
-    music_label: Label
-    music_label_number: Label Number
+    music_format: Record Format
+    vinyl_speed: Type
+    music_label: Record Label
+    music_label_number: Catalog Number
 
   actions:
     spree:
