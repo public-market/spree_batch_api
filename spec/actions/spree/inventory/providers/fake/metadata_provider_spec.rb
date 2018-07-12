@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-RSpec.describe Spree::Inventory::Providers::Books::MetadataProvider, type: :action do
+RSpec.describe Spree::Inventory::Providers::Fake::MetadataProvider, type: :action do
   subject(:properties) { metadata[:properties] }
 
   let(:metadata) { described_class.call(isbn) }

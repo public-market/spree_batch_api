@@ -1,14 +1,12 @@
-require 'spec_helper'
-
-RSpec.describe Spree::Inventory::Providers::Books::VariantProvider, type: :action do
+RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action do
   subject(:variant) { described_class.call(item_json, options: options) }
 
   let(:options) { {} }
 
   describe 'validation' do
-    let(:item_json) { { ean: 'isbn' } }
+    let(:item_json) { { sku: 'sku' } }
 
-    it { expect { variant }.to raise_error(Spree::ImportError) }
+    it { expect { variant }.to raise_error(Spree::ImportError).with_message(include(":ean=>[\"is missing\"]")) }
   end
 
   describe 'creation' do
@@ -24,16 +22,16 @@ RSpec.describe Spree::Inventory::Providers::Books::VariantProvider, type: :actio
       }
     end
 
-    context 'with unknown isbn' do
-      let(:isbn) { Spree::Inventory::Providers::Books::MetadataProvider::UNKNOWN_ISBN }
+    let(:isbn) { '9780979728303' }
 
-      it { expect { variant }.to raise_error(Spree::ImportError, 'Unknown ISBN found') }
+    context 'with unknown isbn' do
+      let(:isbn) { Spree::Inventory::Providers::Fake::MetadataProvider::UNKNOWN_ISBN }
+
+      it { expect { variant }.to raise_error(Spree::ImportError, 'Metadata for given identifier not found') }
     end
 
     context 'with known isbn' do
       subject(:product) { variant.product }
-
-      let(:isbn) { '9780979728303' }
 
       it { expect(product).not_to be_nil }
       it { expect(product).to be_persisted }
@@ -41,13 +39,8 @@ RSpec.describe Spree::Inventory::Providers::Books::VariantProvider, type: :actio
       it { expect(product.available_on).not_to be_nil }
       it { expect(product.description).not_to be_nil }
       it { expect(product.properties.count).to eq(7) }
-      it { expect(product.properties.first.presentation).to eq('ISBN') }
-      it { expect(product.properties.last.presentation).to eq('Subject') }
       it { expect(product.option_types.count).to eq(1) }
       it { expect(product.variants.count).to eq(1) }
-      it { expect(product.property(:author)).not_to be_nil }
-      it { expect(product.property(:published_at)).not_to be_nil }
-      it { expect(product.properties.where(name: 'empty').first).to be_nil }
       it { expect(product.taxons.count).to eq(1) }
       it { expect(product.taxons.first.taxonomy.name).to eq('Categories') }
 
@@ -58,10 +51,6 @@ RSpec.describe Spree::Inventory::Providers::Books::VariantProvider, type: :actio
       it { expect(variant.price).to eq(item_json[:price]) }
       it { expect(variant.cost_price).to eq(item_json[:price]) }
       it { expect(variant.total_on_hand).to eq(1) }
-
-      context 'with images', vcr: true, images: true do
-        it { expect(product.images.count).to eq(1) }
-      end
 
       context 'with variant notes' do
         Spree::Variant.class_eval do

@@ -3,15 +3,15 @@ require 'dry-validation'
 module Spree
   module Inventory
     module Providers
-      # Default variant provider inventory format
-      UploadItemSchema = ::Dry::Validation.Schema do
-        required(:sku).filled(:str?)
-        required(:quantity).filled(:int?)
-        required(:price).filled(:decimal?)
-        optional(:notes).str?
-      end
-
       class DefaultVariantProvider < Spree::BaseAction # rubocop:disable Metrics/ClassLength
+        VALIDATION_SCHEMA =
+          ::Dry::Validation.Schema do
+            required(:sku).filled(:str?)
+            required(:quantity).filled(:int?)
+            required(:price).filled(:decimal?)
+            optional(:notes).str?
+          end
+
         param :item_json
         option :options, optional: true, default: proc { {} }
 
@@ -28,8 +28,18 @@ module Spree
           item_json
         end
 
+        def upload_item_schema
+          if options[:validation_schema].blank?
+            self.class::VALIDATION_SCHEMA || VALIDATION_SCHEMA
+          else
+            self.class.parent.const_get("#{options[:validation_schema].parameterize(separator: '_').camelize}ValidationSchema")
+          end
+        rescue NameError
+          raise Spree::ImportError, I18n.t('actions.spree.inventory.providers.incorrect_validation_schema')
+        end
+
         def validate_item(item_json)
-          result = self.class.parent::UploadItemSchema.call(item_json)
+          result = upload_item_schema.call(item_json)
           messages = result.messages
           raise ImportError.new(messages.to_s, messages) if result.failure?
           result.to_h
@@ -56,7 +66,7 @@ module Spree
         # rubocop:disable Metrics/AbcSize
         def create_product(identifier)
           metadata = find_metadata(identifier)
-          raise ImportError, t('metadata_not_found') if metadata.blank?
+          raise ImportError, t('metadata_not_found', default: I18n.t('actions.spree.inventory.providers.default_variant_provider.metadata_not_found')) if metadata.blank?
 
           create_stock_location
 
@@ -78,7 +88,7 @@ module Spree
         end
 
         def metadata_provider
-          self.class.parent::MetadataProvider
+          Fake::MetadataProvider
         end
 
         def product_option_types_attrs

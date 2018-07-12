@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Spree::Inventory::JsonImportAction, type: :action, run_jobs: true do
   subject(:call) { described_class.call(payload, upload: upload) }
 

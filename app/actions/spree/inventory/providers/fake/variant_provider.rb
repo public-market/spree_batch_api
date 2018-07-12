@@ -1,26 +1,25 @@
-require 'dry-validation'
-
 module Spree
   module Inventory
     module Providers
-      module Books
-        PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
-        TAXONOMY = 'Categories'.freeze
-
-        UploadItemSchema = ::Dry::Validation.Schema do
-          required(:ean).filled(:str?)
-          required(:sku).filled(:str?)
-          required(:quantity).filled(:int?)
-          required(:price).filled(:decimal?)
-          required(:condition).value(included_in?: PERMITTED_CONDITIONS)
-          optional(:notes).str?
-          optional(:seller).str?
-        end
-
+      module Fake
         class VariantProvider < DefaultVariantProvider
-          ISBN_PROPERTY = 'isbn'.freeze
+          PERMITTED_CONDITIONS = ['New', 'Like New', 'Excellent', 'Very Good', 'Good', 'Acceptable'].freeze
+          VALIDATION_SCHEMA =
+            ::Dry::Validation.Schema do
+              required(:ean).filled(:str?)
+              required(:sku).filled(:str?)
+              required(:quantity).filled(:int?)
+              required(:price).filled(:decimal?)
+              required(:condition).value(included_in?: PERMITTED_CONDITIONS)
+              optional(:notes).str?
+              optional(:seller).str?
+            end
 
           protected
+
+          def taxonomy_name
+            options&.dig(:taxonomy) || 'Categories'
+          end
 
           def product_identifier(hash)
             hash[:ean]
@@ -28,7 +27,7 @@ module Spree
 
           def find_product(isbn)
             Product.joins(:properties)
-                  .find_by(spree_properties: { name: ISBN_PROPERTY },
+                   .find_by(spree_properties: { name: 'isbn' },
                             spree_product_properties: { value: isbn })
           end
 

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Spree::Upload, type: :model do
   describe 'after create' do
     let(:upload) { create :upload }

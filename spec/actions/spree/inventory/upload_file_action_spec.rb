@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Spree::Inventory::UploadFileAction, type: :action do
   subject(:upload) { described_class.call(file_format, 'ean') }
 

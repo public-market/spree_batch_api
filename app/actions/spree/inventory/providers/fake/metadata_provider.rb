@@ -3,7 +3,7 @@ require 'ffaker'
 module Spree
   module Inventory
     module Providers
-      module Books
+      module Fake
         class MetadataProvider < Spree::BaseAction
           param :isbn
 

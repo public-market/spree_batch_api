@@ -15,12 +15,14 @@ en:
     spree:
       inventory:
         providers:
+          incorrect_validation_schema: Incorrect validation schema
+
           default_variant_provider:
-            metadata_not_found: 'Metadata for given identifier not found'
+            metadata_not_found: Metadata for given identifier not found
 
           books:
             variant_provider:
-              metadata_not_found: 'Unknown ISBN found'
+              metadata_not_found: Unknown ISBN found
 
           music:
             variant_provider:

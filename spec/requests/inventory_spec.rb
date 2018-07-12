@@ -1,8 +1,6 @@
-require 'spec_helper'
-
 RSpec.describe 'Inventory update', type: :request do
   subject(:update) do
-    post '/api/v1/inventory/csv', params: content, headers: { 'X-Spree-Token': token }
+    post '/api/v1/inventory/csv/fake', params: content, headers: { 'X-Spree-Token': token }
     response
   end
 
@@ -20,6 +18,10 @@ RSpec.describe 'Inventory update', type: :request do
     let(:token) { admin.spree_api_key }
 
     context 'when has content' do
+      before do
+        allow(Spree::Inventory::UploadFileAction).to receive(:supported_product_types) { %w[fake] }
+      end
+
       let(:content) { File.read(File.join(Dir.pwd, 'spec/fixtures', 'inventory.csv')) }
 
       it { is_expected.to have_http_status(:ok) }

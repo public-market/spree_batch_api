@@ -1,7 +1,5 @@
-require 'spec_helper'
-
 RSpec.describe Spree::Inventory::CSVImportAction, type: :action, run_jobs: true do
-  subject(:call) { described_class.call(local_file, upload: upload, options: { product_type: 'books' }) }
+  subject(:call) { described_class.call(local_file, upload: upload, options: { product_type: :fake }) }
 
   let(:upload) { create :upload }
 

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true do
   class FakeImportAction < Spree::Inventory::BaseImportAction
     param :items
@@ -33,7 +31,7 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
 
   context 'when product type is not specified' do
     let(:items) { [item] }
-    let(:product_type) { :ffake }
+    let(:product_type) { :books }
     let(:opts) { { product_type: product_type } }
 
     it { expect(upload.total).to eq(1) }
@@ -49,7 +47,7 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
   end
 
   context 'when product type is specified' do
-    let(:opts) { { product_type: :books } }
+    let(:opts) { { product_type: :fake } }
 
     context 'when pass 1 item' do
       let(:items) { [item] }
