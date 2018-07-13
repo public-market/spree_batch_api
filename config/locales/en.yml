@@ -52,5 +52,5 @@ en:
     spree:
       import_inventory_item_worker:
         invalid_item: 'Item %{index} invalid: %{messages}'
-        unsupported_variant_provider: 'Variant provider for product type %{product_type} not found'
+        unsupported_variant_provider: 'Variant provider %{provider} for product type %{product_type} not found'
 

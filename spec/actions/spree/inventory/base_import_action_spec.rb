@@ -40,7 +40,7 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
       expect(upload.reload.upload_errors.first.message).to eq(
         I18n.t('workers.spree.import_inventory_item_worker.invalid_item',
           index: 0,
-          messages: I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type)
+          messages: I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', provider: '', product_type: product_type)
         )
       )
     end
@@ -64,6 +64,18 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
       it { expect(upload.total).to eq(1) }
       it { expect(upload.reload.processed).to eq(1) }
       it { expect(upload.reload.upload_errors.count).to eq(1) }
+    end
+
+    context 'when provider is specified' do
+      let(:opts) { { product_type: :fake, provider: :real_seller } }
+      let(:items) { [item] }
+
+      class RealSellerVariantProvider < Spree::Inventory::Providers::Fake::VariantProvider; end
+
+      it { expect(upload.total).to eq(1) }
+      it { expect(upload.reload.processed).to eq(1) }
+      it { expect(Spree::Product.count).to eq(1) }
+      it { expect(Spree::Variant.count).to eq(2) }
     end
   end
 end

@@ -3,6 +3,7 @@ module Spree
     class UploadFileAction < BaseAction
       param :format
       param :file_path
+      option :provider, optional: true
       option :product_type, optional: true, default: proc { 'books' }
       option :upload_options, optional: true, default: proc { {} }
 
@@ -14,7 +15,7 @@ module Spree
         check_product_type
 
         upload = create_upload
-        job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, file_path, product_type: product_type)
+        job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, file_path, product_type: product_type, provider: provider)
 
         upload.update(job_id: job_id)
         upload.reload

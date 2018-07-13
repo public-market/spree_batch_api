@@ -5,7 +5,12 @@ module Spree
         def update
           authorize! :create, Product
           file_path = save_content
-          @upload = Inventory::UploadFileAction.call(params[:content_format], file_path, product_type: params[:product_type])
+          @upload = Inventory::UploadFileAction.call(
+            params[:content_format],
+            file_path,
+            provider: params[:provider],
+            product_type: params[:product_type]
+          )
         end
 
         private

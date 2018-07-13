@@ -9,7 +9,7 @@ module Spree
       upload = self.class.load_upload(options)
 
       begin
-        inventory_provider(options['product_type']).call(item_json.with_indifferent_access, options: options.with_indifferent_access)
+        inventory_provider(options).call(item_json.with_indifferent_access, options: options.with_indifferent_access)
       rescue ImportError => e
         self.class.catch_error(upload, options, e.message)
       end
@@ -25,10 +25,18 @@ module Spree
       catch_error(upload, options, msg['error_message'])
     end
 
-    def inventory_provider(product_type = '')
-      "Spree::Inventory::Providers::#{product_type.parameterize(separator: '_').camelize}::VariantProvider".constantize
+    def inventory_provider(options)
+      product_type = options['product_type'] || ''
+      provider = options['provider'] || ''
+
+      provider_class = [
+        product_type.parameterize(separator: '_').camelize,
+        "#{provider.parameterize(separator: '_').camelize}VariantProvider"
+      ].join('::')
+
+      Spree::Inventory::Providers.const_get(provider_class)
     rescue NameError
-      raise Spree::ImportError, I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type)
+      raise Spree::ImportError, I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', product_type: product_type, provider: provider)
     end
 
     def self.load_upload(options)

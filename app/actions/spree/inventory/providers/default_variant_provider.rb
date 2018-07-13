@@ -29,20 +29,18 @@ module Spree
         end
 
         def upload_item_schema
-          if options[:validation_schema].blank?
-            self.class::VALIDATION_SCHEMA || VALIDATION_SCHEMA
-          else
-            self.class.parent.const_get("#{options[:validation_schema].parameterize(separator: '_').camelize}ValidationSchema")
-          end
-        rescue NameError
-          raise Spree::ImportError, I18n.t('actions.spree.inventory.providers.incorrect_validation_schema')
+          self.class::VALIDATION_SCHEMA || VALIDATION_SCHEMA
         end
 
         def validate_item(item_json)
-          result = upload_item_schema.call(item_json)
+          result = upload_item_schema.with(validation_options).call(item_json)
           messages = result.messages
           raise ImportError.new(messages.to_s, messages) if result.failure?
           result.to_h
+        end
+
+        def validation_options
+          {}
         end
 
         def process_item(hash)
