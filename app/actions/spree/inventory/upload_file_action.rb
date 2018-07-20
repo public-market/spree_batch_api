@@ -7,8 +7,7 @@ module Spree
       option :product_type, optional: true, default: proc { 'books' }
       option :upload_options, optional: true, default: proc { {} }
 
-      UPLOAD_BUCKET = 'inventory_uploads'.freeze
-      SUPPORTED_FORMATS = %w[csv json].freeze
+      SUPPORTED_FORMATS = %w[csv csv_tab json].freeze
 
       def call
         check_format

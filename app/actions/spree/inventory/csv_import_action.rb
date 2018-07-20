@@ -4,10 +4,13 @@ module Spree
   module Inventory
     class CSVImportAction < BaseImportAction
       param :local_file
+      option :csv_options, optional: true, default: proc { {} }
 
       def map_items
+        csv_opts = { headers: true, encoding: 'ISO8859-1' }.merge(csv_options)
+
         index = 0
-        CSV.foreach(local_file, headers: true, encoding: 'ISO8859-1') do |row|
+        CSV.foreach(local_file, csv_opts) do |row|
           yield(item_json(row), index)
           index += 1
         end
