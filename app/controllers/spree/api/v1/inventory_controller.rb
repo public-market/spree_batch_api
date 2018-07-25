@@ -2,20 +2,18 @@ module Spree
   module Api
     module V1
       class InventoryController < Spree::Api::BaseController
-        def update # rubocop:disable Metrics/MethodLength
+        def update
           authorize!(:create, Product)
           file_path = save_content
 
           options = {
+            format: params[:content_format],
+            file_path: file_path,
             provider: inventory_params[:provider],
             product_type: inventory_params[:product_type]
           }.merge(additional_inventory_params)
 
-          @upload = Inventory::UploadFileAction.call(
-            params[:content_format],
-            file_path,
-            options
-          )
+          @upload = Inventory::UploadFileAction.call(options)
         end
 
         private

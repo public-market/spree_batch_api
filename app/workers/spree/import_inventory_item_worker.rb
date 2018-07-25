@@ -8,6 +8,8 @@ module Spree
     def perform(item_json, options)
       upload = self.class.load_upload(options)
 
+      options.merge!(upload.metadata)
+
       begin
         inventory_provider(options).call(item_json.with_indifferent_access, options: options.with_indifferent_access)
       rescue ImportError => e

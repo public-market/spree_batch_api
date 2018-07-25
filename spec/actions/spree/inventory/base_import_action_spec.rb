@@ -9,7 +9,8 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
 
   before { FakeImportAction.call(items, upload: upload, options: opts) }
 
-  let(:opts) { {} }
+  let(:opts) { { file_path: '', format: 'csv', product_type: product_type } }
+  let(:product_type) { :fake }
   let(:upload) { create(:upload) }
   let(:item) do
     {
@@ -29,53 +30,41 @@ RSpec.describe Spree::Inventory::BaseImportAction, type: :action, run_jobs: true
     it { expect(upload.total).to eq(0) }
   end
 
-  context 'when product type is not specified' do
+  context 'when pass 1 item' do
     let(:items) { [item] }
-    let(:product_type) { :books }
-    let(:opts) { { product_type: product_type } }
 
     it { expect(upload.total).to eq(1) }
     it { expect(upload.reload.processed).to eq(1) }
-    it do
-      expect(upload.reload.upload_errors.first.message).to eq(
-        I18n.t('workers.spree.import_inventory_item_worker.invalid_item',
-          index: 0,
-          messages: I18n.t('workers.spree.import_inventory_item_worker.unsupported_variant_provider', provider: '', product_type: product_type)
-        )
-      )
-    end
+    it { expect(Spree::Product.count).to eq(1) }
+    it { expect(Spree::Variant.count).to eq(2) }
   end
 
-  context 'when product type is specified' do
-    let(:opts) { { product_type: :fake } }
+  context 'when have error' do
+    let(:items) { [{ ean: 'UNKNOWN' }] }
 
-    context 'when pass 1 item' do
-      let(:items) { [item] }
+    it { expect(upload.total).to eq(1) }
+    it { expect(upload.reload.processed).to eq(1) }
+    it { expect(upload.reload.upload_errors.count).to eq(1) }
+  end
 
-      it { expect(upload.total).to eq(1) }
-      it { expect(upload.reload.processed).to eq(1) }
-      it { expect(Spree::Product.count).to eq(1) }
-      it { expect(Spree::Variant.count).to eq(2) }
-    end
+  context 'when provider is specified' do
+    let(:opts) { { file_path: '', product_type: :fake, provider: :fake_seller } }
 
-    context 'when have error' do
-      let(:items) { [{ ean: 'UNKNOWN' }] }
+    let(:items) { [item] }
 
-      it { expect(upload.total).to eq(1) }
-      it { expect(upload.reload.processed).to eq(1) }
+    context 'with not existing provider' do
       it { expect(upload.reload.upload_errors.count).to eq(1) }
+      it { expect(Spree::Product.count).to eq(0) }
     end
 
-    context 'when provider is specified' do
-      let(:opts) { { product_type: :fake, provider: :real_seller } }
-      let(:items) { [item] }
-
+    context 'with existing provider' do
       class RealSellerVariantProvider < Spree::Inventory::Providers::Fake::VariantProvider; end
 
+      let(:opts) { { file_path: '', product_type: :fake, provider: :real_seller } }
+
       it { expect(upload.total).to eq(1) }
       it { expect(upload.reload.processed).to eq(1) }
       it { expect(Spree::Product.count).to eq(1) }
-      it { expect(Spree::Variant.count).to eq(2) }
     end
   end
 end

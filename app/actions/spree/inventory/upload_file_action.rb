@@ -1,43 +1,34 @@
 module Spree
   module Inventory
     class UploadFileAction < BaseAction
-      param :format
-      param :file_path
-      option :provider, optional: true
-      option :product_type, optional: true, default: proc { 'books' }
-      option :upload_options, optional: true, default: proc { {} }
-
-      SUPPORTED_FORMATS = %w[csv csv_tab json].freeze
+      param :upload_meta
 
       def call
-        check_format
-        check_product_type
-
         upload = create_upload
-        job_id = UploadInventoryWorker.perform_async(upload.id.to_s, format, file_path, product_type: product_type, provider: provider)
 
-        upload.update(job_id: job_id)
-        upload.reload
-      rescue Spree::ImportError => e
-        { errors: e.message.to_s }
-      end
+        if upload.valid?
+          job_id = UploadInventoryWorker.perform_async(upload.id.to_s)
 
-      def self.supported_product_types
-        %w[books music]
+          upload.update(job_id: job_id)
+          upload.reload
+        else
+          { errors: upload.errors.full_messages }
+        end
       end
 
       private
 
-      def check_format
-        raise Spree::ImportError, t('unsupported_format') unless SUPPORTED_FORMATS.include?(format)
-      end
-
-      def check_product_type
-        raise Spree::ImportError, t('unsupported_product_type') unless self.class.supported_product_types.include?(product_type)
-      end
-
       def create_upload
-        Upload.create(**upload_options)
+        assign_default_meta
+        Upload.create(**upload_options, metadata: upload_meta)
+      end
+
+      def upload_options
+        {}
+      end
+
+      def assign_default_meta
+        upload_meta[:product_type] ||= 'fake'
       end
     end
   end

@@ -8,7 +8,17 @@
 <br>
 <div data-hook="admin_upload_fields"></div>
 
+<hr>
+
+<h3>Metadata</h3>
+<% @upload.metadata.each do |k, v| %>
+  <strong><%= k %>: </strong> <%= v %>
+  <br>
+<% end %>
+
 <% if @upload.upload_errors.any? %>
+  <h3>Errors</h3>
+
   <table class="table" id="listing_errors" data-hook>
     <colgroup>
       <col style="width: 40%">

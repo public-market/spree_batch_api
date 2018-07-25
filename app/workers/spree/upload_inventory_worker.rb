@@ -7,11 +7,17 @@ module Spree
 
     attr_reader :upload
 
-    def perform(upload_id, format, filepath, opts = {})
+    def perform(upload_id)
       @upload = Upload.find_by(id: upload_id)
 
+      return if @upload.blank?
+
+      metadata = @upload.metadata
+
+      filepath = metadata['file_path']
+
       local_file = load_file(filepath)
-      upload_action(format, local_file, opts)
+      upload_action(local_file, metadata['format'])
     end
 
     private
@@ -20,13 +26,13 @@ module Spree
       filepath
     end
 
-    def upload_action(format, local_file, opts) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def upload_action(local_file, format) # rubocop:disable Metrics/MethodLength
       case format
       when 'json'
         payload = File.read(local_file)
-        Inventory::JsonImportAction.call(payload, upload: upload, options: options.merge(opts))
+        Inventory::JsonImportAction.call(payload, upload: upload, options: options)
       when 'csv'
-        Inventory::CSVImportAction.call(local_file, upload: upload, options: options.merge(opts))
+        Inventory::CSVImportAction.call(local_file, upload: upload, options: options)
       when 'csv_tab'
         csv_opts = {
           col_sep: "\t",
@@ -35,7 +41,7 @@ module Spree
           converters: [->(s) { s&.strip }],
           header_converters: ->(h) { h&.downcase }
         }
-        Inventory::CSVImportAction.call(local_file, upload: upload, csv_options: csv_opts, options: options.merge(opts))
+        Inventory::CSVImportAction.call(local_file, upload: upload, csv_options: csv_opts, options: options)
       end
     end
 
