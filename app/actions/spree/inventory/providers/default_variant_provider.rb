@@ -17,7 +17,7 @@ module Spree
 
         def call
           item_hash = validate_item(cast_values(item_json))
-          process_item(item_hash)
+          Taxon.no_touching { process_item(item_hash) }
         end
 
         protected
