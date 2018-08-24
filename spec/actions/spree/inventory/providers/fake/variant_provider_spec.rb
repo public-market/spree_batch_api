@@ -6,7 +6,7 @@ RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action
   describe 'validation' do
     let(:item_json) { { sku: 'sku' } }
 
-    it { expect { variant }.to raise_error(Spree::ImportError).with_message(include(":ean=>[\"is missing\"]")) }
+    it { expect { variant }.to raise_error(Spree::ImportError).with_message(include(':ean=>["is missing"]')) }
   end
 
   describe 'creation' do

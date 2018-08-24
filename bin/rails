@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/spree_batch_api/engine', __FILE__)
+ENGINE_ROOT = File.expand_path('..', __dir__)
+ENGINE_PATH = File.expand_path('../lib/spree_batch_api/engine', __dir__)
 
 require 'rails/all'
 require 'rails/engine/commands'

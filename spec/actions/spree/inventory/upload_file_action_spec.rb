@@ -11,7 +11,7 @@ RSpec.describe Spree::Inventory::UploadFileAction, type: :action do
     let(:file_format) { 'csv1' }
 
     it { expect { upload }.not_to change(Spree::Upload, :count) }
-    it { expect(upload[:errors].first).to include("\"format\"=>[\"must be one of") }
+    it { expect(upload[:errors].first).to include('"format"=>["must be one of') }
   end
 
   describe '#check_product_type' do
@@ -23,7 +23,7 @@ RSpec.describe Spree::Inventory::UploadFileAction, type: :action do
       let(:product_type) { 'electronics' }
 
       it { expect { upload }.not_to change(Spree::Upload, :count) }
-      it { expect(upload[:errors].first).to include("\"product_type\"=>[\"must be one of") }
+      it { expect(upload[:errors].first).to include('"product_type"=>["must be one of') }
     end
   end
 end

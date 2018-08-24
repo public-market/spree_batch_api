@@ -1,11 +1,6 @@
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: 2.4
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
-    - '**/Appraisals'
-    - '**/Guardfile'
+  TargetRubyVersion: 2.5
   Exclude:
     - 'spec/dummy/**/*'
     - 'lib/generators/**/*'

@@ -6,6 +6,6 @@ RSpec.describe Spree::Inventory::Providers::DefaultVariantProvider, type: :actio
   describe 'validation' do
     let(:item_json) { { ean: 'isbn' } }
 
-    it { expect { variant }.to raise_error(Spree::ImportError).with_message(include(":sku=>[\"is missing\"]")) }
+    it { expect { variant }.to raise_error(Spree::ImportError).with_message(include(':sku=>["is missing"]')) }
   end
 end
