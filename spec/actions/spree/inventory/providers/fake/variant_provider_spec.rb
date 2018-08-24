@@ -82,5 +82,12 @@ RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action
       it { expect(variant.cost_price).to eq(10.5) }
       it { expect(variant.total_on_hand).to eq(2) }
     end
+
+    describe 'saving upload id' do
+      let(:upload) { create(:upload) }
+      let(:options) { { upload_id: upload.id } }
+
+      it { expect(variant.product.uploads.first).to eq upload }
+    end
   end
 end

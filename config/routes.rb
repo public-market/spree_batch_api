@@ -5,7 +5,13 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  namespace :admin do
+  namespace :admin, path: Spree.admin_path do
     resources :uploads, only: %i[index show]
+
+    resources :products do
+      member do
+        get :inventory_uploads
+      end
+    end
   end
 end

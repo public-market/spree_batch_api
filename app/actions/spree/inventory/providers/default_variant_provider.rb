@@ -49,8 +49,14 @@ module Spree
 
           Product.transaction do
             product ||= create_product(identifier)
+            assign_upload_to_product(product)
             upsert_variant(product, hash)
           end
+        end
+
+        def assign_upload_to_product(product)
+          product.product_uploads
+                 .create(upload_id: options[:upload_id])
         end
 
         def product_identifier(_hash)

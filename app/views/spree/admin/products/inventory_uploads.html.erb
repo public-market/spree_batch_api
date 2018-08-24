@@ -1,0 +1,31 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :product_uploads } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+
+<% if @uploads.blank? %>
+  <h4>No uploads found</h4>
+<% else %>
+  <div class="panel panel-default">
+    <table class="table table-bordered" id="listing_product_stock">
+      <thead>
+        <tr data-hook="admin_product_uploads_headers">
+          <th>Uploaded At</th>
+          <th>Upload path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @uploads.each do |upload| %>
+          <tr data-hook="admin_product_uploads_rows">
+            <td>
+              <%= upload.created_at %>
+            </td>
+            <td>
+              <%= upload.metadata['file_path'] %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @uploads, simple: true } %>
+<% end %>
