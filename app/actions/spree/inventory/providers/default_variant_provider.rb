@@ -67,7 +67,7 @@ module Spree
           raise NotImplementedError, 'find_product'
         end
 
-        # rubocop:disable Metrics/AbcSize
+        # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         def create_product(identifier)
           metadata = find_metadata(identifier)
           raise ImportError, t('metadata_not_found', default: I18n.t('actions.spree.inventory.providers.default_variant_provider.metadata_not_found')) if metadata.blank?
@@ -78,6 +78,10 @@ module Spree
           build_product_master(product, metadata)
 
           product.product_option_types.build(product_option_types_attrs)
+          # Double check existing product
+          existing_product = find_product(identifier)
+          return existing_product if existing_product.present?
+
           product.save!
 
           set_properties(product, metadata[:properties])
@@ -85,7 +89,7 @@ module Spree
 
           product
         end
-        # rubocop:enable Metrics/AbcSize
+        # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
         def find_metadata(identifier)
           metadata_provider.call(identifier)
