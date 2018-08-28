@@ -44,13 +44,24 @@ module Spree
         end
 
         def process_item(hash)
+          variant = find_variant(variant_sku(hash))
+          if variant.present?
+            update_variant(variant, hash)
+          else
+            create_variant(hash)
+          end
+        end
+
+        def create_variant(hash)
           identifier = product_identifier(hash)
           product = find_product(identifier)
 
           Product.transaction do
             product ||= create_product(identifier)
             assign_upload_to_product(product)
-            upsert_variant(product, hash)
+
+            variant = Variant.new(sku: variant_sku(hash), product_id: product.id)
+            update_variant(variant, hash)
           end
         end
 
@@ -65,6 +76,10 @@ module Spree
 
         def find_product(_identifier)
           raise NotImplementedError, 'find_product'
+        end
+
+        def variant_sku(hash)
+          hash[:sku]
         end
 
         # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -143,8 +158,7 @@ module Spree
           parent_taxon.products << product
         end
 
-        def upsert_variant(product, item)
-          variant = fetch_variant(product, item)
+        def update_variant(variant, item)
           variant.price = variant.cost_price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
           update_variant_hook(variant, item) # run this before options association set
@@ -159,8 +173,8 @@ module Spree
           [{ name: condition_option_name, value: item[:condition] }]
         end
 
-        def fetch_variant(product, item)
-          Variant.unscoped.where(sku: item[:sku], product: product).first_or_initialize
+        def find_variant(sku)
+          Variant.unscoped.find_by(sku: sku)
         end
 
         def process_variant_quantity(variant, quantity)
