@@ -6,17 +6,15 @@ module Spree
 
     validate :metadata_schema
 
-    SUPPORTED_FORMATS = %w[csv csv_tab json].freeze
-    SUPPORTED_PRODUCT_TYPES = %w[fake].freeze
-
     METADATA_SCHEMA =
       ::Dry::Validation.Schema do
         configure do
           option :permitted_product_types
+          option :supported_formats
         end
 
         required('file_path').filled
-        required('format').value(included_in?: SUPPORTED_FORMATS)
+        required('format').value(included_in?: supported_formats)
         required('product_type').value(included_in?: permitted_product_types)
       end
 
@@ -26,10 +24,21 @@ module Spree
       total.present? && total == processed ? 'completed' : 'processing'
     end
 
+    class << self
+      def supported_formats
+        %w[csv csv_tab json].freeze
+      end
+
+      def supported_product_types
+        %w[fake].freeze
+      end
+    end
+
     private
 
     def metadata_schema
-      result = METADATA_SCHEMA.with(permitted_product_types: SUPPORTED_PRODUCT_TYPES).call(metadata)
+      result = METADATA_SCHEMA.with(permitted_product_types: self.class.supported_product_types, supported_formats: self.class.supported_formats)
+                              .call(metadata)
 
       return if result.success?
       errors.add(:metadata, result.messages)
