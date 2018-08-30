@@ -48,23 +48,23 @@ module Spree
           if variant.present?
             update_variant(variant, hash)
           else
-            create_variant(hash)
+            variant = create_variant(hash)
           end
+
+          create_product_upload(variant)
+          variant
         end
 
         def create_variant(hash)
           identifier = product_identifier(hash)
           product = find_product(identifier) || create_product(identifier)
 
-          assign_upload_to_product(product)
-
           variant = Variant.new(sku: variant_sku(hash), product_id: product.id)
           update_variant(variant, hash)
         end
 
-        def assign_upload_to_product(product)
-          product.product_uploads
-                 .create(upload_id: options[:upload_id])
+        def create_product_upload(variant)
+          ProductUpload.create(product_id: variant.product_id, upload_id: options[:upload_id])
         end
 
         def product_identifier(_hash)
