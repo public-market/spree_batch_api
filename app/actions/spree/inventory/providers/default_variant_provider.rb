@@ -54,15 +54,12 @@ module Spree
 
         def create_variant(hash)
           identifier = product_identifier(hash)
-          product = find_product(identifier)
+          product = find_product(identifier) || create_product(identifier)
 
-          Product.transaction do
-            product ||= create_product(identifier)
-            assign_upload_to_product(product)
+          assign_upload_to_product(product)
 
-            variant = Variant.new(sku: variant_sku(hash), product_id: product.id)
-            update_variant(variant, hash)
-          end
+          variant = Variant.new(sku: variant_sku(hash), product_id: product.id)
+          update_variant(variant, hash)
         end
 
         def assign_upload_to_product(product)
@@ -97,10 +94,12 @@ module Spree
           existing_product = find_product(identifier)
           return existing_product if existing_product.present?
 
-          product.save!
+          Product.transaction do
+            product.save!
 
-          set_properties(product, metadata[:properties])
-          categorize(product, metadata[:taxons])
+            set_properties(product, metadata[:properties])
+            categorize(product, metadata[:taxons])
+          end
 
           product
         end
