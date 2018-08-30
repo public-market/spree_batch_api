@@ -2,9 +2,9 @@
 
 # Spree Batch API
 
-[![Build Status](https://travis-ci.org/abundance-labs/spree_batch_api.svg?branch=master)](https://travis-ci.org/abundance-labs/spree_batch_api)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7f68249b09662c08ec62/maintainability)](https://codeclimate.com/github/abundance-labs/spree_batch_api/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/7f68249b09662c08ec62/test_coverage)](https://codeclimate.com/github/abundance-labs/spree_batch_api/test_coverage)
+[![Build Status](https://travis-ci.org/public-market/spree_batch_api.svg?branch=master)](https://travis-ci.org/public-market/spree_batch_api)
+[![Maintainability](https://api.codeclimate.com/v1/badges/27c408372144ced90920/maintainability)](https://codeclimate.com/github/public-market/spree_batch_api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/27c408372144ced90920/test_coverage)](https://codeclimate.com/github/public-market/spree_batch_api/test_coverage)
 
 Batch API extension allows to update product/inventory/orders in batches.
 
