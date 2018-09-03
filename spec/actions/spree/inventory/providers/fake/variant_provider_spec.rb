@@ -43,6 +43,7 @@ RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action
       it { expect(product.variants.count).to eq(1) }
       it { expect(product.taxons.count).to eq(1) }
       it { expect(product.taxons.first.taxonomy.name).to eq('Categories') }
+      it { expect(product.master.sku).to eq(isbn) }
 
       it { expect(variant).not_to be_nil }
       it { expect(variant).not_to eq(product.master) }

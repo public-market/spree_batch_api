@@ -72,6 +72,7 @@ module Spree
         end
 
         def find_product(_identifier)
+          # Product.joins(:master).find_by(spree_variants: { sku: identifier })
           raise NotImplementedError, 'find_product'
         end
 
@@ -89,6 +90,7 @@ module Spree
           product = build_new_product(metadata)
           build_product_master(product, metadata)
 
+          product.master.sku = identifier
           product.product_option_types.build(product_option_types_attrs)
           # Double check existing product
           existing_product = find_product(identifier)
