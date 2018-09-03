@@ -162,8 +162,8 @@ module Spree
         def update_variant(variant, item)
           variant.price = variant.cost_price = item[:price]
           variant.notes = item[:notes] if variant.respond_to?(:notes)
-          update_variant_hook(variant, item) # run this before options association set
-          variant.options = variant_options(item)
+          update_variant_hook(variant, item)
+          variant.build_options(variant_options(item))
 
           variant.save!
 
