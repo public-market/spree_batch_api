@@ -25,12 +25,6 @@ module Spree
             hash[:ean]
           end
 
-          def find_product(isbn)
-            Product.joins(:properties)
-                   .find_by(spree_properties: { name: 'isbn' },
-                            spree_product_properties: { value: isbn })
-          end
-
           def product_option_types_attrs
             { option_type: condition_option_type }
           end

@@ -71,9 +71,8 @@ module Spree
           raise NotImplementedError, 'product_identifier'
         end
 
-        def find_product(_identifier)
-          # Product.joins(:master).find_by(spree_variants: { sku: identifier })
-          raise NotImplementedError, 'find_product'
+        def find_product(identifier)
+          Product.joins(:master).find_by(spree_variants: { sku: identifier })
         end
 
         def variant_sku(hash)
