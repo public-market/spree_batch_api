@@ -4,7 +4,6 @@ module Spree
       param :upload_meta
 
       def call
-        queue_name = upload_options.delete(:queue_name)
         upload = create_upload
 
         if upload.valid?
@@ -23,6 +22,8 @@ module Spree
         assign_default_meta
         Upload.create(**upload_options, metadata: upload_meta)
       end
+
+      def queue_name; end
 
       def upload_options
         {}
