@@ -3,7 +3,7 @@ require 'sidekiq'
 module Spree
   class UploadInventoryWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :upload, retry: false, backtrace: true
+    sidekiq_options retry: false, backtrace: true
 
     attr_reader :upload
 

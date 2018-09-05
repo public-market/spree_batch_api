@@ -4,10 +4,11 @@ module Spree
       param :upload_meta
 
       def call
+        queue_name = upload_options.delete(:queue_name)
         upload = create_upload
 
         if upload.valid?
-          job_id = UploadInventoryWorker.perform_async(upload.id.to_s)
+          job_id = UploadInventoryWorker.set(queue: queue_name).perform_async(upload.id.to_s)
 
           upload.update(job_id: job_id)
           upload.reload

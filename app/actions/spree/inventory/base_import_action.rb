@@ -7,7 +7,7 @@ module Spree
       def call
         total = 0
         map_items do |item_json, index|
-          Spree::ImportInventoryItemWorker.perform_async(
+          Spree::ImportInventoryItemWorker.set(queue: queue_name).perform_async(
             item_json,
             options.merge(upload_id: upload.id, index: index)
           )
@@ -18,6 +18,10 @@ module Spree
       end
 
       protected
+
+      def queue_name
+        options[:queue_name]
+      end
 
       def map_items
         raise NotImplementedError, 'map_items'

@@ -3,7 +3,7 @@ require 'sidekiq'
 module Spree
   class ImportInventoryItemWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :upload, retry: 3, backtrace: true
+    sidekiq_options retry: 3, backtrace: true
 
     def perform(item_json, options)
       upload = self.class.load_upload(options)
