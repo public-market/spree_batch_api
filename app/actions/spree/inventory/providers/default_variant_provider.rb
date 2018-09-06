@@ -95,7 +95,8 @@ module Spree
           build_product_master(product, metadata)
 
           product.master.sku = identifier
-          product.product_option_types.build(product_option_types_attrs)
+          build_option_types(product)
+
           # Double check existing product
           existing_product = find_product(identifier)
           return existing_product if existing_product.present?
@@ -119,8 +120,17 @@ module Spree
           Fake::MetadataProvider
         end
 
-        def product_option_types_attrs
-          {}
+        def build_option_types(product)
+          option_types.each do |type|
+            product.product_option_types.build(option_type: option_type_attrs(type))
+          end
+        end
+
+        def option_type_attrs(type)
+          attrs = { name: type[:name], presentation: type[:presentation] }
+          attrs[:option_values_attributes] = type[:values] if type[:values].present?
+
+          OptionType.where(name: type[:name]).first_or_create(attrs)
         end
 
         def build_new_product(metadata)
@@ -175,7 +185,11 @@ module Spree
         end
 
         def variant_options(item)
-          [{ name: condition_option_name, value: item[:condition] }]
+          option_types.map { |type| { name: type[:name], value: variant_option_value(item, type) } }
+        end
+
+        def variant_option_value(item, option_type)
+          item.dig(option_type[:name].to_sym)
         end
 
         def find_variant(sku)
