@@ -23,9 +23,14 @@ module Spree
         protected
 
         def cast_values(item_json)
-          item_json[:quantity] = item_json[:quantity].to_s.to_i
-          item_json[:price] = item_json[:price].to_s.to_f.to_d
+          item_json[:quantity] = cast(item_json[:quantity]) { |v| v.to_i }
+          item_json[:price] = cast(item_json[:price]) { |v| v.to_f.to_d }
           item_json
+        end
+
+        def cast(value)
+          str = value.to_s
+          str.empty? ? str : yield(str)
         end
 
         def upload_item_schema
