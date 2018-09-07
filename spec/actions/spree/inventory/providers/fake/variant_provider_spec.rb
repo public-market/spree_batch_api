@@ -66,6 +66,10 @@ RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action
 
         it { expect(product.taxons.first.taxonomy.name).to eq('Books') }
       end
+
+      describe 'keywords' do
+        it { expect(product.tag_list).to include('super', 'book') }
+      end
     end
 
     context 'when variant already exists' do

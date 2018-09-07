@@ -35,6 +35,7 @@ module Spree
                 width: Random.rand(5.0).round(1),
                 depth: Random.rand(1.0).round(1)
               },
+              keywords: 'super book',
               taxons: %w[General Book]
             }
           end

@@ -4,6 +4,7 @@ module Spree
   module Inventory
     module Providers
       class DefaultVariantProvider < Spree::BaseAction # rubocop:disable Metrics/ClassLength
+        KEYWORDS_DELIMITER = ' '.freeze
         VALIDATION_SCHEMA =
           ::Dry::Validation.Schema do
             required(:sku).filled(:str?)
@@ -105,6 +106,7 @@ module Spree
             product.save!
 
             set_properties(product, metadata[:properties])
+            set_tags(product, metadata[:keywords])
             categorize(product, metadata[:taxons])
           end
 
@@ -161,6 +163,12 @@ module Spree
               product.set_property(property_name, property_value, I18n.t("properties.#{property_name}", default: property_name.to_s.humanize))
             end
           end
+        end
+
+        def set_tags(product, keywords)
+          return if keywords.blank?
+          product.tag_list.add(*keywords.split(KEYWORDS_DELIMITER))
+          product.save!
         end
 
         def categorize(product, taxons)
