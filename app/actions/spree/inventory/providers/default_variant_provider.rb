@@ -31,7 +31,7 @@ module Spree
 
         def cast(value)
           str = value.to_s
-          str.empty? ? str : yield(str)
+          str.empty? ? nil : yield(str)
         end
 
         def upload_item_schema
