@@ -42,6 +42,7 @@ module Spree
           result = upload_item_schema.with(validation_options).call(item_json)
           messages = result.messages
           raise ImportError.new(messages.to_s, messages) if result.failure?
+
           result.to_h
         end
 
@@ -142,13 +143,19 @@ module Spree
         def product_attrs(metadata)
           {
             name: metadata[:title],
-            price: metadata[:price]
+            price: metadata[:price],
+            description: metadata[:description],
+            meta_description: metadata[:description],
+            meta_title: metadata[:title]&.truncate(255), # spree has validation: length maximum - 255
+            available_on: metadata[:available_on].presence || Time.current,
+            discontinue_on: metadata[:discontinue_on].presence
           }
         end
 
         def build_product_master(product, metadata)
           product.master.assign_attributes(master_variant_attributes(metadata))
           return if metadata[:images].blank?
+
           metadata[:images].each do |img|
             product.master.images.build(
               alt: img[:title],
@@ -167,6 +174,7 @@ module Spree
 
         def set_tags(product, keywords)
           return if keywords.blank?
+
           product.tag_list.add(*keywords.split(KEYWORDS_DELIMITER))
           product.save!
         end

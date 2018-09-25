@@ -26,17 +26,10 @@ module Spree
           end
 
           def product_attrs(metadata)
-            {
-              name: metadata[:title],
-              price: metadata[:price],
-              description: metadata[:description],
-              meta_description: metadata[:description],
-              meta_title: metadata[:title],
-              meta_keywords: metadata.dig(:properties, :subject),
-              shipping_category: ShippingCategory.first_or_create(name: 'Default'),
-              available_on: metadata[:available_on].presence || Time.current,
-              discontinue_on: metadata[:discontinue_on].presence
-            }
+            super.merge(
+              meta_keywords: metadata.dig(:properties, :subject)&.truncate(255), # spree has validation: length maximum - 255,
+              shipping_category: ShippingCategory.first_or_create(name: 'Default')
+            )
           end
 
           def option_types

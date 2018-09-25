@@ -70,6 +70,19 @@ RSpec.describe Spree::Inventory::Providers::Fake::VariantProvider, type: :action
       describe 'keywords' do
         it { expect(product.tag_list).to include('super', 'book') }
       end
+
+      context 'with long title' do
+        let(:long_title) { 'Digest of the acts repealing the charters of certain municipal corporations : the proclamation of the governor thereon; the acts establishing taxing districts; together with the act levying additional taxes for sewers, and Ordinances of the Taxing district of Shelby County, Tennessee; together with' }
+
+        before do
+          allow_any_instance_of(Spree::Inventory::Providers::Fake::MetadataProvider).to receive(:book_title).and_return(long_title)
+        end
+
+        it 'creates product' do
+          expect(product.name).to eq long_title
+          expect(product.meta_title).to eq long_title.truncate(255)
+        end
+      end
     end
 
     context 'when variant already exists' do
