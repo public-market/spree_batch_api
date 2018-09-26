@@ -4,15 +4,24 @@ module Spree
       option :options, optional: true, default: proc { {} }
       option :upload
 
-      def call
+      BATCH_SIZE = 1000
+
+      def call # rubocop:disable Metrics/MethodLength
         total = 0
+        args = []
+
         map_items do |item_json, index|
-          Spree::ImportInventoryItemWorker.set(queue: queue_name).perform_async(
-            item_json,
-            options.merge(upload_id: upload.id, index: index)
-          )
+          args << [item_json, options.merge(upload_id: upload.id, index: index)]
+
+          if args.size >= BATCH_SIZE
+            push_bulk(args)
+            args = []
+          end
+
           total += 1
         end
+
+        push_bulk(args) if args.present?
 
         upload.update(total: total)
       end
@@ -25,6 +34,10 @@ module Spree
 
       def map_items
         raise NotImplementedError, 'map_items'
+      end
+
+      def push_bulk(args)
+        Sidekiq::Client.push_bulk('class' => Spree::ImportInventoryItemWorker, 'queue' => queue_name, 'args' => args)
       end
     end
   end
