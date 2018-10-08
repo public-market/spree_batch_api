@@ -53,7 +53,7 @@ module Spree
         def process_item(hash)
           variant = find_variant(variant_sku(hash))
           if variant.present?
-            update_variant(variant, hash) if upload_last?(variant)
+            update_variant(variant, hash)
           else
             variant = create_variant(hash)
           end
@@ -73,13 +73,11 @@ module Spree
         def upload_last?(variant)
           return true if upload_id.blank? || upload_index.blank?
 
-          result = Variant.where(id: variant)
-                          .where('coalesce(upload_id, 0) < :upload_id or (coalesce(upload_id, 0) = :upload_id and coalesce(upload_index, 0) <= :upload_index)',
-                                 upload_id: upload_id, upload_index: upload_index)
-                          .update_all(upload_id: upload_id, upload_index: upload_index)
-                          .positive?
-          Rails.logger.warn("Wrong update order: upload_id #{upload_id}, upload_index #{upload_index}") unless result
-          result
+          Variant.where(id: variant)
+                 .where('coalesce(upload_id, 0) < :upload_id or (coalesce(upload_id, 0) = :upload_id and coalesce(upload_index, 0) <= :upload_index)',
+                        upload_id: upload_id, upload_index: upload_index)
+                 .update_all(upload_id: upload_id, upload_index: upload_index)
+                 .positive?
         end
 
         def create_product_upload(variant)
@@ -214,6 +212,11 @@ module Spree
           variant.notes = item[:notes] if variant.respond_to?(:notes)
           update_variant_hook(variant, item)
           variant.build_options(variant_options(item))
+
+          if variant.persisted? && !upload_last?(variant)
+            Rails.logger.warn("Wrong variant '#{variant.sku}'' update order: upload_id #{upload_id}, upload_index #{upload_index}")
+            return
+          end
 
           variant.save!
 
