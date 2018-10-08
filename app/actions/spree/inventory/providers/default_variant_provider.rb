@@ -53,7 +53,7 @@ module Spree
         def process_item(hash)
           variant = find_variant(variant_sku(hash))
           if variant.present?
-            update_variant(variant, hash)
+            update_variant(variant, hash) if upload_last?(variant)
           else
             variant = create_variant(hash)
           end
@@ -66,12 +66,30 @@ module Spree
           identifier = product_identifier(hash)
           product = find_product(identifier) || create_product(identifier)
 
-          variant = Variant.new(sku: variant_sku(hash), product_id: product.id)
+          variant = Variant.new(sku: variant_sku(hash), product_id: product.id, upload_id: upload_id, upload_index: upload_index)
           update_variant(variant, hash)
         end
 
+        def upload_last?(variant)
+          return true if upload_id.blank? || upload_index.blank?
+
+          Variant.where(id: variant)
+                 .where('coalesce(upload_id, 0) < :upload_id or (coalesce(upload_id, 0) = :upload_id and coalesce(upload_index, 0) <= :upload_index)',
+                        upload_id: upload_id, upload_index: upload_index)
+                 .update_all(upload_id: upload_id, upload_index: upload_index)
+                 .positive?
+        end
+
         def create_product_upload(variant)
-          ProductUpload.create(product_id: variant.product_id, upload_id: options[:upload_id])
+          ProductUpload.create(product_id: variant.product_id, upload_id: upload_id)
+        end
+
+        def upload_id
+          options[:upload_id]
+        end
+
+        def upload_index
+          options[:index]
         end
 
         def product_identifier(_hash)
