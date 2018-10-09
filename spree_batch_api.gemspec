@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
+  s.add_dependency 'bulk_insert'
   s.add_dependency 'dry-initializer'
   s.add_dependency 'dry-validation'
   s.add_dependency 'paperclip'

@@ -18,8 +18,6 @@ module Spree
         self.class.catch_error(item, e.message)
       end
 
-      item.destroy!
-
       self.class.increment_processed(upload)
     end
 
@@ -28,7 +26,6 @@ module Spree
       item = UploadItem.find(msg.dig('args', 0))
       increment_processed(item.upload)
       catch_error(item, msg['error_message'])
-      item.destroy!
     end
 
     def inventory_provider(options)

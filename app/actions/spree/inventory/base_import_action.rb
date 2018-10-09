@@ -11,10 +11,12 @@ module Spree
         args = []
 
         map_items do |item_json, index|
-          item = upload.upload_items.create!(index: index,
-                                             item_json: item_json,
-                                             options: options.merge(upload_id: upload.id, index: index))
-          args << [item.id]
+          args << {
+            upload_id: upload.id,
+            index: index,
+            item_json: item_json,
+            options: options.merge(upload_id: upload.id, index: index)
+          }
 
           if args.size >= BATCH_SIZE
             push_bulk(args)
@@ -40,7 +42,11 @@ module Spree
       end
 
       def push_bulk(args)
-        Sidekiq::Client.push_bulk('class' => Spree::ImportInventoryItemWorker, 'queue' => queue_name, 'args' => args)
+        worker = UploadItem.bulk_insert(:upload_id, :index, :item_json, :options, :created_at, :updated_at, return_primary_keys: true)
+        worker.add_all(args)
+        worker.save!
+
+        Sidekiq::Client.push_bulk('class' => Spree::ImportInventoryItemWorker, 'queue' => queue_name, 'args' => worker.result_sets.first.rows)
       end
     end
   end
