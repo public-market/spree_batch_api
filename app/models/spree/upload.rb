@@ -3,6 +3,7 @@ require 'dry-validation'
 module Spree
   class Upload < Spree::Base
     has_many :upload_errors, dependent: :destroy
+    has_many :upload_items, dependent: :delete_all
 
     validate :metadata_schema
 

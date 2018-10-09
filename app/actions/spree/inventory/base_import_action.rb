@@ -11,7 +11,10 @@ module Spree
         args = []
 
         map_items do |item_json, index|
-          args << [item_json, options.merge(upload_id: upload.id, index: index)]
+          item = upload.upload_items.create!(index: index,
+                                             item_json: item_json,
+                                             options: options.merge(upload_id: upload.id, index: index))
+          args << [item.id]
 
           if args.size >= BATCH_SIZE
             push_bulk(args)

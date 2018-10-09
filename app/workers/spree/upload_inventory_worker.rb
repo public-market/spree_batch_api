@@ -12,6 +12,7 @@ module Spree
 
       return if @upload.blank?
 
+      @upload.upload_errors.delete_all
       metadata = @upload.metadata
 
       filepath = metadata['file_path']
