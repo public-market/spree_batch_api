@@ -42,7 +42,7 @@ module Spree
       end
 
       def push_bulk(args)
-        worker = UploadItem.bulk_insert(:upload_id, :index, :item_json, :options, :created_at, :updated_at, return_primary_keys: true)
+        worker = UploadItem.bulk_insert(:upload_id, :index, :item_json, :options, :created_at, :updated_at, set_size: BATCH_SIZE, return_primary_keys: true)
         worker.add_all(args)
         worker.save!
 
