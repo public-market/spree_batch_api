@@ -19,6 +19,7 @@ module Spree
       end
 
       self.class.increment_processed(upload)
+      item.destroy!
     end
 
     sidekiq_retries_exhausted do |msg, _ex|
