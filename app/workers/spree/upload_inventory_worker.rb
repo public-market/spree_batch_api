@@ -30,7 +30,7 @@ module Spree
       filepath
     end
 
-    def upload_action(local_file, format) # rubocop:disable Metrics/MethodLength
+    def upload_action(local_file, format) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       case format
       when 'json'
         payload = File.read(local_file)
@@ -46,6 +46,8 @@ module Spree
           header_converters: ->(h) { h&.downcase }
         }
         Inventory::CSVImportAction.call(local_file, upload: upload, csv_options: csv_opts, options: options)
+      else
+        Inventory.const_get("#{format.parameterize(separator: '_').camelize}ImportAction").call(local_file, upload: upload, options: options)
       end
     end
 
